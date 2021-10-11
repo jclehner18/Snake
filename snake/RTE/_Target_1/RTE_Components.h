@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'snake' 
- * Target:  'Target 1' 
+ * Project: 'snake.Target_1' 
+ * Target:  'Target_1' 
  */
 
 #ifndef RTE_COMPONENTS_H
