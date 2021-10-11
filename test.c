@@ -1,2 +1,0 @@
-printf("hello");
-printf("uhhhhhhhhhhhhhh");
