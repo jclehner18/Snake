@@ -10,7 +10,7 @@
 
 
 void gpio_init(void);
-int main(void);
+int knob(void);
 // Config PB3 as input with pull-up.
 // Config PA5 as output to Nucleo "user" LED
 void gpio_init()
@@ -32,7 +32,7 @@ void gpio_init()
 }
 
 
-int main( )
+int knob( )
 {
     static struct btn_struct quad_A = {.mask_for_btn= 0<<8, 
                                       .pin_ptr = &(GPIOB->IDR),
