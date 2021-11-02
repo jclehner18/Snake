@@ -10,13 +10,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-int head;
-int futurehead;
+static int head;
+static int futurehead;
 
 static int snakedirection; // not 100% sure im allowed to declare local var static?
                            // int from 1-4, N, E, S, W
 static int snakepositions[20]; //  snakepositions[0] is the tail, the head is the furthest current value out, this should work havnt tested yet
 static int fruitposition;
+static bool gamestart=true;
 
 
 
@@ -147,9 +148,15 @@ int calcsnakelength(){ // should go through array and figure out lenght of snake
 }
 
 
-// ----TODO--------------------------------------------------------------------------------------------------------------------------------------------
-void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
 
+void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
+	head = 51; // general middle left side of screen to give player time to react
+	snakedirection = 2;
+	int snakepositions[20]={0}; // sets array of positions to all 0
+	appendsnake(52, false, 1); // adds the single head to the snake positions
+	calcsnakelength(); // recalcualtes snake length
+	generatenewfruit(); // starting fruit
+	
 }
 
 void game(){ 
@@ -170,6 +177,31 @@ void game(){
         }
 		}
 		*/
+	
+	//-----------------------------------------------TODO----------------------------------------------------------
+	
+		if(gamestart==true){ initializesnake();}
+		else{
+			bool collision=false;
+			
+			int newdirection = updatedirection(msg); // new direction absed on input from queue
+			futurehead = future(newdirection, head); // new head position based on new dir and old head
+			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true){ // checks if either type of collision has occured
+			collision=true;
+			//write_q(&q1, [100, 0]); // display task knows that a 100 means game over
+				
+			
+			} 
+			else{
+				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
+			}
+			
+			
+			
+			
+		}
+	
+		
 		
 		
 	
