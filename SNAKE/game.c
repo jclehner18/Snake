@@ -15,6 +15,8 @@ int futurehead;
 
 static int snakedirection; // not 100% sure im allowed to declare local var static?
                            // int from 1-4, N, E, S, W
+static int snakepositions[20]; //  snakepositions[0] is the tail, the head is the furthest current value out, this should work havnt tested yet
+static int fruitposition;
 
 
 
@@ -63,28 +65,91 @@ int future(newdirection, head) // defines the next position of the snakes head
 }
 
 
-bool valueinarray(int array[8], int search)// used in check boundcollision, checks if a given value is in a gven array
-{
+bool valueinarray(int array[], int search, int size)// used in check boundcollision, checks if a given value is in a gven array
+{                                                   // couldnt seem to get this to work y checking size of array so im passing parameter size too
 	bool isinarray=false;
-	for (int i=0; i<5; i++)
+	for (int i=0; i<size; i++)
 	{if(array[i]==search){isinarray=true; break;}} 
 	return isinarray;
 }
 
- 
+
 bool checkboundcollision(newdirection, head, futurehead) //checks if the next position will hit any of the four walls
 {                                                        // as far as I can tell you cant return more than 1 parameter from fucntion without statically allocating mem
                                                          // otherwise future and check bound collision can be combined
 	int leftbound[8]={1,13,25,37,49,61,73,85}; //the 8 leftmost grid positions
 	int rightbound[8]={12,24,36,48,60,72,84,96};
 	bool hitbound=false;
-	bool rightbord=valueinarray(rightbound,head);
-	bool leftbord=valueinarray(leftbound,head);
+	bool rightbord=valueinarray(rightbound,head, 8);
+	bool leftbord=valueinarray(leftbound,head, 8);
 	
 	if(newdirection==2 && rightbord==true){ hitbound=true;}//if going right and on right border
 	else if (newdirection==4 && leftbord==true){ hitbound=true;}
 	if(futurehead<1 || futurehead>96){hitbound=true;} //outside the north and south bounds
 	return hitbound;
+}
+
+int generatenewfruit()  // generates a new fruit location using random num, also verifies the new fruit is not placed within the snake
+{
+	int fruitposition;
+	
+	int lower = 1, upper = 96;
+	fruitposition = (rand() % (upper - lower + 1)) + lower;
+        printf("%d ", fruitposition);
+	while(valueinarray(snakepositions, fruitposition, 20)==true){ //looked at generating within a range excluding some numbers but couldnt get anything to work
+		fruitposition = (rand() % (upper - lower + 1)) + lower;     // this will loop until a number is generated the meets criteria, very non-optimal will fix later
+	}
+	return fruitposition;
+}
+
+bool checkbodycollision(int futurehead){
+	bool collision = false;
+	if(valueinarray(snakepositions, futurehead, 20)){
+		collision = true;
+	}
+	return collision;
+}
+
+bool checkfruitcollision(int futurehead){
+	bool fruitcollision = false;
+	if(futurehead==fruitposition){
+		fruitcollision = true;
+	}
+	return fruitcollision;
+}
+
+void appendsnake(int futurehead, bool fruitcollision, int length){ // updating the snakepositions array with new head position
+	if (fruitcollision==true){
+			snakepositions[length]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
+	}
+	else{
+		for(int i; i<length-1; i++){ //potential problem when size = 19 trying to check value i+1 that is out of the array
+			snakepositions[i]=snakepositions[i+1]; // shifts all positions, will erase the oldest loc
+		}
+		snakepositions[length]=futurehead; //adds in the new postion to the head spot
+	}
+}
+
+// [5,6,7,0,0,0]  idea behind shifting= oldest tail no longer exists when no fruit was gotten
+// [6,7,0,0,0,0]  the shift gets rid of where head was as its set to the position one past which is 0
+// [6,7,8,0,0,0]  resets the head position to future head
+
+
+
+
+int calcsnakelength(){ // should go through array and figure out lenght of snake, snake will not take up all 20 positions of the array rather thsi will calc # of array positions used
+	int length=0;
+	for(int i; i<20; i++){
+		if(snakepositions[i]!=0){length++;}
+		else{break;} // this should break out of the for loop but need to test it still
+	}
+	return length;
+}
+
+
+// ----TODO--------------------------------------------------------------------------------------------------------------------------------------------
+void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
+
 }
 
 void game(){ 
