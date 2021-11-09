@@ -186,12 +186,11 @@ void game(){
 			
 			int newdirection = updatedirection(msg); // new direction absed on input from queue
 			futurehead = future(newdirection, head); // new head position based on new dir and old head
-			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true){ // checks if either type of collision has occured
-			collision=true;
-			//write_q(&q1, [100, 0]); // display task knows that a 100 means game over
-				
-			
-			} 
+			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
+				{ // checks if either type of collision has occured
+					collision=true;
+					//write_q(&q1, [100, 0]); // display task knows that a 100 means game over
+				} 
 			else{
 				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
 			}

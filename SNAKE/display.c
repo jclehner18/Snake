@@ -8,7 +8,8 @@
 #include "stm32l053xx.h"
 #include <stdint.h>
 #include <stdbool.h>
-
+//#include "queue.h"
+//#include "queue.c"
 
 void init_gpio(void); 
 void init_spi(void);
@@ -26,6 +27,8 @@ void DrawSquare(int BoardPosition); // will accept the board position int 1-96 a
 void ClearSquare(int BoardPosition); // same as Draw Square but clears given boardposition
 void gameoveranimation(void);
 static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
+static bool Isinitialized =false;
+void Display(void);
 
 void init_gpio(void)
 {
@@ -228,10 +231,10 @@ ClearSquare(i-1);
 }
 }
 
-int main(void)
-
+//int main(void)
+void Display()
 {
-
+if (Isinitialized==false){ // will only run on first call
 init_gpio(); // all the initialization stuff for the display will need moved to start of actual main / their own function
 CDLow();
 init_spi() ;
@@ -239,8 +242,11 @@ reset();
 init_display();
 CDHigh();
 clear_all();
-	
-	
+Isinitialized=true;
+}
+
+randomcondition=true; // stuff only works in the while loop, this is a dummy holder
+
 while(randomcondition==true){
 // just testing positioning, seem to be all working
 	
@@ -249,7 +255,9 @@ while(randomcondition==true){
 
 	// Standard move: Draw new head and clear old head
 	// Gained fruit: Draw new fruit, no clear as snake gets bigger
-
+	
+	//int16_t msg;
+	//read_q(&Direction, &msg);  // cant seem to figure this out
 	
 // simulated snake movement
 DrawSquare(39);
