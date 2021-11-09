@@ -1,7 +1,6 @@
 #include "stm32l053xx.h"
 #include <stdint.h>
 #include <stdbool.h>
-//#include "main.h"
 
 void init_gpio(void); 
 void init_spi(void);

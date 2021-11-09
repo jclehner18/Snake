@@ -6,6 +6,8 @@
 queue_t Direction;// queue for use from knob to game logic
 queue_t Locations;
 
+queue_t light;
+
  //fixes Display() warning, not sure if this is misra compliant though
 
 
@@ -25,6 +27,11 @@ int main()
 	
 	Display(); // not sure about the warning 
 	
+	
+	init_queue(&light, 1);
+	write_q(&light, GPIOC->BSRR = GPIO_BSRR_BS_0);
+	
+	led();
 	
 	//TODO: knob queue
 	//TODO: LED queue

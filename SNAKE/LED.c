@@ -15,6 +15,7 @@
 #include "main.h"
 
 void config_io(void);
+int led(void);
 //void config_timer21(void);
 
 void config_gpio(void)
@@ -40,18 +41,34 @@ void config_gpio(void)
 	TIM21->EGR |= TIM_EGR_UG; //force update
 }*/
 
+void lightup(int32_t x)
+{
+	if(x==1)
+	{
+		GPIOC->BSRR = GPIO_BSRR_BS_0;
+		for(volatile int32_t n=0; n<200000; n++);
+		GPIOC->BSRR = GPIO_BSRR_BR_0;
+	}
+}
 
 int led(void) //main file for this file
 {
 	config_gpio();
 	//config_timer21();
 	
+	
+	
 	while(1)  //----------maybe we can just have the led blink when a collision happens-----------
 	{
+		int16_t msg;
+		read_q(&light, &msg);
+		
+		lightup(msg);
+		
 		//this just makes led blink, not change brightness
-		GPIOC->BSRR = GPIO_BSRR_BS_0;
-		for(volatile int32_t n=0; n<200000; n++);
-		GPIOC->BSRR = GPIO_BSRR_BR_0;
-		for(volatile int32_t n=0; n<200000; n++);
+		//GPIOC->BSRR = GPIO_BSRR_BS_0;
+		//for(volatile int32_t n=0; n<200000; n++);
+		//GPIOC->BSRR = GPIO_BSRR_BR_0;
+		//for(volatile int32_t n=0; n<200000; n++);
 	}
 }
