@@ -45,7 +45,7 @@ int led(void) //main file for this file
 	config_gpio();
 	config_timer21();
 	
-	while(1)
+	while(1)  //----------maybe we can just have the led blink when a collision happens-----------
 	{
 		//this just makes led blink, not change brightness
 		GPIOC->BSRR = GPIO_BSRR_BS_0;

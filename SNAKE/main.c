@@ -4,12 +4,14 @@
 #include <stdlib.h>
 #include "queue.h"
 
-
+#include "queue.c"
 #include "display.c" //fixes Display() warning, not sure if this is misra compliant though
+#include "knob.c"
+#include "game.c"
 
 
 
-
+//knob timing
 
 
 int main()
@@ -23,6 +25,11 @@ int main()
 	write_q(&Locations, 40);
 	
 	Display(); // not sure about the warning 
+	
+	
+	//TODO: knob queue
+	//TODO: LED queue
+	//TODO: Game queue
 	
 	
 	

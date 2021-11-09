@@ -56,7 +56,7 @@ enum btn_edge update_btn(struct btn_struct *pb)
 		
 		
 		
-		switch(pb->state)
+		switch(pb->state) //state machine for eB
     {
     case (DOWN):    
         if (b == BTN_ACTIVE) { pb->state = MAYBE_PRESSED; eB = INACTIVE;}
