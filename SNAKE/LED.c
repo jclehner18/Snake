@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include "stm32l053xx.h"
 #include <stdint.h>
-#include "queue.h"
+#include "main.h"
 
 void config_io(void);
 //void config_timer21(void);
