@@ -8,6 +8,7 @@
 #include "stm32l053xx.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include "main.h"
 //#include "queue.h"
 //#include "queue.c"
 
@@ -256,8 +257,8 @@ while(randomcondition==true){
 	// Standard move: Draw new head and clear old head
 	// Gained fruit: Draw new fruit, no clear as snake gets bigger
 	
-	//int16_t msg;
-	//read_q(&Direction, &msg);  // cant seem to figure this out
+	int16_t msg;
+	read_q(&Direction, &msg);  // cant seem to figure this out
 	
 // simulated snake movement
 DrawSquare(39);

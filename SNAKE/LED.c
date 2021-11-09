@@ -12,9 +12,10 @@
 #include <stdlib.h>
 #include "stm32l053xx.h"
 #include <stdint.h>
+#include "queue.h"
 
 void config_io(void);
-void config_timer21(void);
+//void config_timer21(void);
 
 void config_gpio(void)
 {
@@ -25,7 +26,7 @@ void config_gpio(void)
 	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPD0_Msk);
 }
 
-void config_timer21(void)
+/*void config_timer21(void)
 {
 	//pretty sure this is configured correcty for pwm
 	
@@ -37,13 +38,13 @@ void config_timer21(void)
 	TIM21->CCER |= TIM_CCER_CC1E;
 	TIM21->CR1 |= TIM_CR1_CEN; //enable counter
 	TIM21->EGR |= TIM_EGR_UG; //force update
-}
+}*/
 
 
 int led(void) //main file for this file
 {
 	config_gpio();
-	config_timer21();
+	//config_timer21();
 	
 	while(1)  //----------maybe we can just have the led blink when a collision happens-----------
 	{

@@ -1,13 +1,12 @@
 // main file for running the schedule
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "queue.h"
+#include "main.h"
 
-#include "queue.c"
-#include "display.c" //fixes Display() warning, not sure if this is misra compliant though
-#include "knob.c"
-#include "game.c"
+
+
+
+ //fixes Display() warning, not sure if this is misra compliant though
+
 
 
 
@@ -16,8 +15,7 @@
 
 int main()
 {
-	queue_t Direction;// queue for use from knob to game logic
-	queue_t Locations; // queue for use from game logic to display
+	 // queue for use from game logic to display
 	init_queue(&Direction, 1); // only one thing so could make it a semeaphore
 	init_queue(&Locations, 2);
 	
