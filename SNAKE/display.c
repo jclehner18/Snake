@@ -5,13 +5,15 @@
 
 // Initialization is still all in this task it will need moved to main at some point.
 
-#include "stm32l053xx.h"
-#include <stdint.h>
-#include <stdbool.h>
+//#include "stm32l053xx.h"
+//#include <stdint.h>
+//#include <stdbool.h>
+//#include "main.h"
+#include "display.h"
 #include "main.h"
-//#include "queue.h"
-//#include "queue.c"
-
+static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
+static bool Isinitialized =false;
+/*
 void init_gpio(void); 
 void init_spi(void);
 void reset(void); // for the reset line not to reset the display
@@ -30,7 +32,7 @@ void gameoveranimation(void);
 static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
 static bool Isinitialized =false;
 void Display(void);
-
+*/
 void init_gpio(void)
 {
 RCC->IOPENR |= RCC_IOPENR_GPIOAEN; // Supply clock to GPIO
@@ -258,9 +260,11 @@ while(randomcondition==true){
 	// Gained fruit: Draw new fruit, no clear as snake gets bigger
 	
 	int16_t msg;
-	read_q(&Direction, &msg);  // cant seem to figure this out
+	read_q(&Locations, &msg);  // cant seem to figure this out
 	
 // simulated snake movement
+	DrawSquare(msg);
+	
 DrawSquare(39);
 for (volatile int32_t i = 0; i < 123456; i++){}
 
