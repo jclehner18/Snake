@@ -4,15 +4,18 @@
 // alternate mode to tracking positions is with [xpos, ypos] where each position requires 2 datapieces to make up its location an x and a y cord
 //still need to move stuff into header file, ect.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "stm32l053xx.h"
-#include <stdbool.h>
-#include <stdint.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include "stm32l053xx.h"
+//#include <stdbool.h>
+//#include <stdint.h>
+
+#include "game.h"
+#include "main.h"
+
 
 static int head;
 static int futurehead;
-
 static int snakedirection; // not 100% sure im allowed to declare local var static?
                            // int from 1-4, N, E, S, W
 static int snakepositions[20]; //  snakepositions[0] is the tail, the head is the furthest current value out, this should work havnt tested yet
@@ -96,10 +99,11 @@ int generatenewfruit()  // generates a new fruit location using random num, also
 	
 	int lower = 1, upper = 96;
 	fruitposition = (rand() % (upper - lower + 1)) + lower;
-        printf("%d ", fruitposition);
+        //printf("%d ", fruitposition); // from testing in an online compiler
 	while(valueinarray(snakepositions, fruitposition, 20)==true){ //looked at generating within a range excluding some numbers but couldnt get anything to work
 		fruitposition = (rand() % (upper - lower + 1)) + lower;     // this will loop until a number is generated the meets criteria, very non-optimal will fix later
 	}
+	fruitposition = fruitposition+96;// display knows that a number this big should be displayed not cleared
 	return fruitposition;
 }
 
@@ -155,14 +159,16 @@ void initializesnake(){ // will run at the start of game, set the snake position
 	int snakepositions[20]={0}; // sets array of positions to all 0
 	appendsnake(52, false, 1); // adds the single head to the snake positions
 	calcsnakelength(); // recalcualtes snake length
-	generatenewfruit(); // starting fruit
-	
+	int fruit = generatenewfruit(); // starting fruit
+	gamestart=false;
+	write_q(&Locations, 51);
+	write_q(&Locations, fruit);
 }
 
 void game(){ 
 	
 		int16_t msg; //variable from queue to be used, 
-								// will be CWW,straight,or CW (1, 2, 3)
+		read_q(&Direction, &msg); // will be CWW,straight,or CW (1, 2, 3)
 		
 		/*   dummy queue code, queues not implemented yet but this is the general section to read from it, read should never fail as game requires a new input to run
     bool successful_read = false;
@@ -189,10 +195,13 @@ void game(){
 			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
 				{ // checks if either type of collision has occured
 					collision=true;
-					//write_q(&q1, [100, 0]); // display task knows that a 100 means game over
+					write_q(&Locations, 0); // display task knows that 2 0's means game over
+					write_q(&Locations, 0);
 				} 
 			else{
 				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
+				write_q(&Locations, futurehead);
+				write_q(&Locations, snakepositions[1]);
 			}
 			
 			

@@ -5,34 +5,13 @@
 
 // Initialization is still all in this task it will need moved to main at some point.
 
-//#include "stm32l053xx.h"
-//#include <stdint.h>
-//#include <stdbool.h>
-//#include "main.h"
+
 #include "display.h"
 #include "main.h"
 static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
 static bool Isinitialized =false;
-/*
-void init_gpio(void); 
-void init_spi(void);
-void reset(void); // for the reset line not to reset the display
-void init_display(void); // sends the required data to initialize the display
-void send_packet(uint32_t); // will send whatever it is given
-void CDLow(void); // set CD line low - for commands   // this was earier than remembering what pin was CD
-void CDHigh(void); // set CD line high - for actually writing
-void clear_all(void); // clears eveything on the display
-void column_reset(void); // sets the column MSB and LSB to start
-void set_page (uint32_t x); // sets the page, takes an int from 1-8
-void set_square(uint32_t x); // takes the row position of where to draw the square from 1-12 and draws the square in that spot
-void clear_square(uint32_t x); // same as set_square but writes 0x00 to clear
-void DrawSquare(int BoardPosition); // will accept the board position int 1-96 and draw a square to the corrosponding spot
-void ClearSquare(int BoardPosition); // same as Draw Square but clears given boardposition
-void gameoveranimation(void);
-static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
-static bool Isinitialized =false;
-void Display(void);
-*/
+
+
 void init_gpio(void)
 {
 RCC->IOPENR |= RCC_IOPENR_GPIOAEN; // Supply clock to GPIO
@@ -260,11 +239,26 @@ while(randomcondition==true){
 	// Gained fruit: Draw new fruit, no clear as snake gets bigger
 	
 	int16_t msg;
+	int16_t msg2;
 	read_q(&Locations, &msg);  // cant seem to figure this out
+	read_q(&Locations, &msg2);
+	
+	DrawSquare(msg);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	if(msg2>96){
+		msg2=msg2-96;
+		DrawSquare(msg2);
+	  }
+	else{
+		ClearSquare(msg2);
+	}
+	for (volatile int32_t i = 0; i < 123456; i++){}
 	
 // simulated snake movement
-	DrawSquare(msg);
+	//DrawSquare(msg);
+	//DrawSquare(msg2);
 	
+	/*
 DrawSquare(39);
 for (volatile int32_t i = 0; i < 123456; i++){}
 
@@ -297,7 +291,7 @@ ClearSquare(28);
 for (volatile int32_t i = 0; i < 123456; i++){}
 	
 gameoveranimation(); // gamover also functions as a clear screen
-	
+	*/
 	
 randomcondition = false;
 
