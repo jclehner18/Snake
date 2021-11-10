@@ -243,7 +243,10 @@ while(randomcondition==true){
 	read_q(&Locations, &msg);  // cant seem to figure this out
 	read_q(&Locations, &msg2);
 	
-	DrawSquare(msg);
+	
+	
+	if(msg==0){} // will have logic for game over animation
+	else{DrawSquare(msg);}
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	if(msg2>96){
 		msg2=msg2-96;
@@ -252,7 +255,7 @@ while(randomcondition==true){
 	else{
 		ClearSquare(msg2);
 	}
-	for (volatile int32_t i = 0; i < 123456; i++){}
+	//for (volatile int32_t i = 0; i < 123456; i++){}
 	
 // simulated snake movement
 	//DrawSquare(msg);

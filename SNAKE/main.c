@@ -18,10 +18,36 @@ queue_t light;
 
 int main()
 {
+	
+	
 	 // queue for use from game logic to display
 	init_queue(&Direction, 1); // only one thing so could make it a semeaphore
 	init_queue(&Locations, 2);
 	
+	//Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 3);
+	game();
+	Display();
+	write_q(&Direction, 1);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 3);
+	game();
+	Display();
+	write_q(&Direction, 1);
+	game();
+	Display();
+	
+	/*
 	write_q(&Direction, 2);
 	write_q(&Locations, 23); // once dispaly can read we can test its entire functionality with dummy data
 	write_q(&Locations, 147); // game will use the value to print +96 when printing 2 squares - for init game
@@ -35,7 +61,7 @@ int main()
 	
 	init_queue(&light, 1);
 	write_q(&light, GPIOC->BSRR = GPIO_BSRR_BS_0);
-	
+	*/
 	//led();
 	
 	//TODO: knob queue

@@ -98,10 +98,16 @@ int generatenewfruit()  // generates a new fruit location using random num, also
 	int fruitposition;
 	
 	int lower = 1, upper = 96;
-	fruitposition = (rand() % (upper - lower + 1)) + lower;
+	
+	//fruitposition = (rand() % (upper - lower + 1)) + lower; rand() isnt actually rand as cant use srand(time()) to set random seed
+	fruitposition = fruitposition+15;
+	if(fruitposition>96){fruitposition=fruitposition/96;}
         //printf("%d ", fruitposition); // from testing in an online compiler
 	while(valueinarray(snakepositions, fruitposition, 20)==true){ //looked at generating within a range excluding some numbers but couldnt get anything to work
-		fruitposition = (rand() % (upper - lower + 1)) + lower;     // this will loop until a number is generated the meets criteria, very non-optimal will fix later
+		//fruitposition = (rand() % (upper - lower + 1)) + lower;     // this will loop until a number is generated the meets criteria, very non-optimal will fix later
+		fruitposition = fruitposition+15;
+		if(fruitposition>96){fruitposition=fruitposition/96;}
+        
 	}
 	fruitposition = fruitposition+96;// display knows that a number this big should be displayed not cleared
 	return fruitposition;
@@ -154,15 +160,15 @@ int calcsnakelength(){ // should go through array and figure out lenght of snake
 
 
 void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
-	head = 51; // general middle left side of screen to give player time to react
+	head = 50; // general middle left side of screen to give player time to react
 	snakedirection = 2;
 	int snakepositions[20]={0}; // sets array of positions to all 0
-	appendsnake(52, false, 1); // adds the single head to the snake positions
+	appendsnake(50, false, 0); // adds the single head to the snake positions
 	calcsnakelength(); // recalcualtes snake length
-	int fruit = generatenewfruit(); // starting fruit
-	gamestart=false;
-	write_q(&Locations, 51);
+	int fruit = 153; // starting fruit will always be the same, in straight line away from start
+	write_q(&Locations, snakepositions[0]);
 	write_q(&Locations, fruit);
+	gamestart=false;
 }
 
 void game(){ 
@@ -192,17 +198,19 @@ void game(){
 			
 			int newdirection = updatedirection(msg); // new direction absed on input from queue
 			futurehead = future(newdirection, head); // new head position based on new dir and old head
-			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
-				{ // checks if either type of collision has occured
-					collision=true;
-					write_q(&Locations, 0); // display task knows that 2 0's means game over
-					write_q(&Locations, 0);
-				} 
-			else{
+			//if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
+			//	{ // checks if either type of collision has occured
+				//	collision=true;
+				//	write_q(&Locations, 0); // display task knows that 2 0's means game over
+				//	write_q(&Locations, 0);
+			//	} 
+			//else{
 				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
+				head = futurehead;
+				snakedirection = newdirection;
 				write_q(&Locations, futurehead);
-				write_q(&Locations, snakepositions[1]);
-			}
+				write_q(&Locations, snakepositions[0]);
+			//}
 			
 			
 			
