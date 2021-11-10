@@ -57,12 +57,12 @@ int main()
 	write_q(&Locations, 71); // first write is to draw
 	write_q(&Locations, 51); // second write is to clear
 	
-	Display();
+	Display();*/
 	
 	init_queue(&light, 1);
-	write_q(&light, GPIOC->BSRR = GPIO_BSRR_BS_0);
-	*/
-	//led();
+	write_q(&light, 400);
+	
+	led();
 	
 	//TODO: knob queue
 	//TODO: LED queue
