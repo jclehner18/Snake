@@ -24,7 +24,31 @@ int main()
 	init_queue(&Direction, 1); // only one thing so could make it a semeaphore
 	init_queue(&Locations, 2);
 	
-	//Display();
+	Display();
+	write_q(&Direction, 3);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 1);
+	game();
+	Display();
+	write_q(&Direction, 3);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
 	write_q(&Direction, 2);
 	game();
 	Display();
@@ -34,16 +58,16 @@ int main()
 	write_q(&Direction, 3);
 	game();
 	Display();
-	write_q(&Direction, 1);
-	game();
-	Display();
 	write_q(&Direction, 2);
 	game();
 	Display();
 	write_q(&Direction, 3);
 	game();
 	Display();
-	write_q(&Direction, 1);
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
 	game();
 	Display();
 	

@@ -226,6 +226,7 @@ CDHigh();
 clear_all();
 Isinitialized=true;
 }
+else{
 
 randomcondition=true; // stuff only works in the while loop, this is a dummy holder
 
@@ -245,7 +246,7 @@ while(randomcondition==true){
 	
 	
 	
-	if(msg==0){} // will have logic for game over animation
+	if(msg==0 && msg2==0){gameoveranimation();} // will have logic for game over animation
 	else{DrawSquare(msg);}
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	if(msg2>96){
@@ -299,7 +300,7 @@ gameoveranimation(); // gamover also functions as a clear screen
 randomcondition = false;
 
 }
-
+}
 
 
 }
