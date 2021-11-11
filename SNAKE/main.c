@@ -67,6 +67,24 @@ int main()
 	write_q(&Direction, 2);
 	game();
 	Display();
+	write_q(&Direction, 3);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 2);
+	game();
+	Display();
+	write_q(&Direction, 1);
+	game();
+	Display();
+	write_q(&Direction, 1);
+	game();
+	Display();
+	write_q(&Direction, 2); //original fruit doesnt disappear and it is recognized as part of the snake. once fruit is hit, the other square is the new snake, nothing gets appended
+	game();
+	Display();
 	write_q(&Direction, 2);
 	game();
 	Display();

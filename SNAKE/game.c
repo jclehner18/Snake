@@ -132,7 +132,9 @@ bool checkfruitcollision(int futurehead){
 void appendsnake(int futurehead, bool fruitcollision, int length){ // updating the snakepositions array with new head position
 	if (fruitcollision==true){
 			//length = calcsnakelength();
+			//length = 0;
 			length++;
+		
 			snakepositions[length]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
 	}
 	else{
@@ -167,6 +169,7 @@ void initializesnake(){ // will run at the start of game, set the snake position
 	int snakepositions[20]={0}; // sets array of positions to all 0
 	appendsnake(49, true, 0); // adds the single head to the snake positions
 	//snakepositions[0]=49;
+	//snakepositions[0]=0;	//-----------when using line above, this clears the square that never goes away ---------
 	//calcsnakelength(); // recalcualtes snake length
 	int fruit = 153; // starting fruit will always be the same, in straight line away from start
 	fruitposition=57;
@@ -192,8 +195,8 @@ void game(){
 			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
 				{ // checks if either type of collision has occured
 					collision=true;
-					write_q(&Locations, 0); // display task knows that 2 0's means game over
-					write_q(&Locations, 0);
+					write_q(&Locations, 123); // display task knows that 2 0's means game over
+					write_q(&Locations, 123);
 				} 
 			else{
 				
@@ -215,6 +218,7 @@ void game(){
 				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
 				head = futurehead;
 				snakedirection = newdirection;
+					
 			}
 			
 			
