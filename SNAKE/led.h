@@ -5,4 +5,3 @@
 
 void config_io(void);
 int led(void);
-void config_timer21(void);

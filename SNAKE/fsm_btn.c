@@ -78,8 +78,10 @@ enum btn_edge update_btn(struct btn_struct *pb)
              pb->state = UP; // In release - minimize damage.
 			 eB = INACTIVE;
              assert(0 && "Unhandled special enum constant!"); // In debug phase - crash!
-    }	
+    }
 	return eA;
  }
+
+	
 
 

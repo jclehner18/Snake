@@ -7,6 +7,7 @@
 #include "stm32l053xx.h"
 #include "stdint.h"
 #include "fsm_btn.h"
+#include "main.h"
 
 
 void gpio_init(void);
@@ -51,7 +52,7 @@ int knob( )
     
     while(1)
 		{
-			eA = update_btn(&quad_A);
+			/*eA = update_btn(&quad_A);
 			if (eA == ACTIVE)
 			{
 				eB = update_btn(&quad_B);
@@ -63,6 +64,30 @@ int knob( )
 				else if(eB==ACTIVE)
 				{GPIOA->ODR = 1<<5;}
 				
+			}*/
+			
+			eA = update_btn(&quad_A);
+			if(eA == ACTIVE)
+			{
+				for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
+				{														//all if statements could potentially be inside for loop.
+																		//this has not been tested, so not entirely sure if this actually works
+					eB = update_btn(&quad_B);
+					if(eB == INACTIVE)
+					{
+						GPIOA->ODR = 0 << 5;
+					}
+					else if(eB==ACTIVE)
+					{
+						GPIOA->ODR = 1<<5;
+					}
+				}
 			}
+			
+			//int16_t msg;
+			//read_q(&knob_action, &msg);
+			//eA = msg;
+			
+			
 		}
 }

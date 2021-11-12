@@ -106,6 +106,9 @@ int main()
 	
 	led();
 	
+	//init_queue(&knob_action, 1);
+	//write_q(&light, update_btn(&quad_A)); //cant pass quad_a
+	
 	//TODO: knob queue
 	//TODO: LED queue
 	//TODO: Game queue

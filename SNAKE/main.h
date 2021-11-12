@@ -13,3 +13,4 @@ extern queue_t Direction;// queue for use from knob to game logic
 extern queue_t Locations;
 
 extern queue_t light;
+extern queue_t knob_action;
