@@ -10,228 +10,220 @@
 //#include <stdbool.h>
 //#include <stdint.h>
 
+//#include <stdio.h>
+//#inlcude <stdint.h>
+//#include <stdbool.h>
+
 #include "game.h"
 #include "main.h"
 
 
+
 static int head;
 static int futurehead;
-static int snakedirection; // not 100% sure im allowed to declare local var static?
-                           // int from 1-4, N, E, S, W
-static int snakepositions[20]; //  snakepositions[0] is the tail, the head is the furthest current value out, this should work havnt tested yet
 static int fruitposition;
+
+static bool fruitcollision;
 static bool gamestart=true;
+static int snakedirection;
+static int length=1;
+static int snakepositions[20];
 
 
 
-int updatedirection(msg){ // determines the direction the snake is moving after the input (N=1, E=2, S=3, W=4)
-	int newdirection;
-	if (snakedirection==1)
-		{
-		if(msg==1){newdirection=4;}//going N, turn CWW = W
-		else if(msg==2){newdirection=1;} //going N, straight = N
-		else if(msg==3){newdirection=2;} //going N, turn CW = E
-		else{}// should never be anything but 1, 2, 3
-		}
-	else if (snakedirection==2)
-		{
-		if(msg==1){newdirection=1;}//going N, turn CWW = W
-		else if(msg==2){newdirection=2;}
-		else if(msg==3){newdirection=3;}
-		else{}// should never be anything but 1, 2, 3
-		}
-	else if (snakedirection==3)
-		{
-		if(msg==1){newdirection=2;}//going N, turn CWW = W
-		else if(msg==2){newdirection=3;}
-		else if(msg==3){newdirection=4;}
-		else{}// should never be anything but 1, 2, 3
-		}
-	else if (snakedirection==4)
-		{
-		if(msg==1){newdirection=3;}//going N, turn CWW = W
-		else if(msg==2){newdirection=4;}
-		else if(msg==3){newdirection=1;}
-		else{}// should never be anything but 1, 2, 3
-		}
-		return newdirection;
-}
 
-
-
-int future(newdirection, head) // defines the next position of the snakes head
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
+void appendsnake( bool fruitcollision) // updating the snakepositions array with new head position
 {
-	if (newdirection ==1){ futurehead=head-12;} //game is 8x12 squares, A north move is simply position - 12
-	else if(newdirection ==2){ futurehead=head+1;}
-	else if(newdirection ==3){ futurehead=head+12;}
-	else if(newdirection ==4){ futurehead=head-1;}
-	return futurehead;
+if (fruitcollision==true)
+    {
+    length++;
+    void generatenewfruit();
+    snakepositions[length-1]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
+    }
+
+else{
+    for(int i=0; i<length; i++)
+    {                                                                    
+    snakepositions[i]=snakepositions[i+1]; // shifts all positions, will erase the oldest loc
+    }
+snakepositions[length-1]=futurehead; //adds in the new postion to the head spot
+    }
 }
 
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
+
+head = 49; // general middle left side of screen to give player time to react
+snakedirection = 2;
+int snakepositions[20]={0}; // sets array of positions to all 0
+
+futurehead=49;
+appendsnake( false);
+int fruit = 153; // starting fruit will always be the same, in straight line away from start
+fruitposition=57;
+write_q(&Locations, 49); // doesnt draw the first square -- stops the random square in the corner
+write_q(&Locations, fruit);
+gamestart=false;
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------------------------
 bool valueinarray(int array[], int search, int size)// used in check boundcollision, checks if a given value is in a gven array
 {                                                   // couldnt seem to get this to work y checking size of array so im passing parameter size too
-	bool isinarray=false;
-	for (int i=0; i<size; i++)
-	{if(array[i]==search){isinarray=true; break;}} 
-	return isinarray;
+bool isinarray=false;
+for (int i=0; i<size; i++)
+{if(array[i]==search){isinarray=true; break;}}
+return isinarray;
 }
 
 
-bool checkboundcollision(newdirection, head, futurehead) //checks if the next position will hit any of the four walls
-{                                                        // as far as I can tell you cant return more than 1 parameter from fucntion without statically allocating mem
-                                                         // otherwise future and check bound collision can be combined
-	int leftbound[8]={1,13,25,37,49,61,73,85}; //the 8 leftmost grid positions
-	int rightbound[8]={12,24,36,48,60,72,84,96};
-	bool hitbound=false;
-	bool rightbord=valueinarray(rightbound,head, 8);
-	bool leftbord=valueinarray(leftbound,head, 8);
-	
-	if(newdirection==2 && rightbord==true){ hitbound=true;}//if going right and on right border
-	else if (newdirection==4 && leftbord==true){ hitbound=true;}
-	if(futurehead<1 || futurehead>96){hitbound=true;} //outside the north and south bounds
-	return hitbound;
-}
-
-int generatenewfruit()  // generates a new fruit location using random num, also verifies the new fruit is not placed within the snake
-{
-	int fruitposition;
-	
-	//int lower = 1, upper = 96;
-	
-	//fruitposition = (rand() % (upper - lower + 1)) + lower; rand() isnt actually rand as cant use srand(time()) to set random seed
-	fruitposition = fruitposition+25;
-	if(fruitposition>96){fruitposition=fruitposition-96;}
-        //printf("%d ", fruitposition); // from testing in an online compiler
-	while(valueinarray(snakepositions, fruitposition, 20)==true){ //looked at generating within a range excluding some numbers but couldnt get anything to work
-		//fruitposition = (rand() % (upper - lower + 1)) + lower;     // this will loop until a number is generated the meets criteria, very non-optimal will fix later
-		fruitposition = fruitposition+25;
-		if(fruitposition>96){fruitposition=fruitposition/96;}
-        
-	}
-	//fruitposition = fruitposition+96;// display knows that a number this big should be displayed not cleared
-	return fruitposition;
-}
-
-bool checkbodycollision(int futurehead){
-	bool collision = false;
-	if(valueinarray(snakepositions, futurehead, 20)){
-		collision = true;
-	}
-	return collision;
-}
+//--------------------------------------------------------------------------------------------------------------------------------------------
 
 bool checkfruitcollision(int futurehead){
-	bool fruitcollision = false;
-	if(futurehead==fruitposition){
-		fruitcollision = true;
-	}
-	return fruitcollision;
+bool fruitcollision = false;
+if(futurehead==fruitposition)
+{
+fruitcollision = true;
+}
+return fruitcollision;
 }
 
-void appendsnake(int futurehead, bool fruitcollision, int length){ // updating the snakepositions array with new head position
-	if (fruitcollision==true){
-			//length = calcsnakelength();
-			//length = 0;
-			length++;
-		
-			snakepositions[length]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
-	}
-	else{
-		for(int i; i<length; i++){ //potential problem when size = 19 trying to check value i+1 that is out of the array
-			snakepositions[i]=snakepositions[i+1]; // shifts all positions, will erase the oldest loc
-		}
-		snakepositions[length]=futurehead; //adds in the new postion to the head spot
-	}
+//--------------------------------------------------------------------------------------------------------------------------------
+void generatenewfruit()  // generates a new fruit location using random num, also verifies the new fruit is not placed within the snake
+{
+fruitposition = fruitposition+25;
+if(fruitposition>96){fruitposition=fruitposition-96;}
+       
+while(valueinarray(snakepositions, fruitposition, 20)==true){ //looked at generating within a range excluding some numbers but couldnt get anything to work
+fruitposition = fruitposition+20;                        // this will loop until a number is generated the meets criteria, very non-optimal will fix later
+if(fruitposition>96){fruitposition=fruitposition/96;}
+}
 }
 
-// [5,6,7,0,0,0]  idea behind shifting= oldest tail no longer exists when no fruit was gotten
-// [6,7,0,0,0,0]  the shift gets rid of where head was as its set to the position one past which is 0
-// [6,7,8,0,0,0]  resets the head position to future head
+//-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
-
-int calcsnakelength(){ // should go through array and figure out lenght of snake, snake will not take up all 20 positions of the array rather thsi will calc # of array positions used
-	int length=0;
-	for(int i; i<20; i++){
-		if(snakepositions[i]!=0){length++;}
-		else{break;} // this should break out of the for loop but need to test it still
-	}
-	return length;
+int updatedirection(int msg){ // determines the direction the snake is moving after the input (N=1, E=2, S=3, W=4)
+int newdirection;
+if (snakedirection==1)
+{
+if(msg==1){newdirection=4;}//going N, turn CWW = W
+else if(msg==2){newdirection=1;} //going N, straight = N
+else if(msg==3){newdirection=2;} //going N, turn CW = E
+else{}// should never be anything but 1, 2, 3
+}
+else if (snakedirection==2)
+{
+if(msg==1){newdirection=1;}//going N, turn CWW = W
+else if(msg==2){newdirection=2;}
+else if(msg==3){newdirection=3;}
+else{}// should never be anything but 1, 2, 3
+}
+else if (snakedirection==3)
+{
+if(msg==1){newdirection=2;}//going N, turn CWW = W
+else if(msg==2){newdirection=3;}
+else if(msg==3){newdirection=4;}
+else{}// should never be anything but 1, 2, 3
+}
+else if (snakedirection==4)
+{
+if(msg==1){newdirection=3;}//going N, turn CWW = W
+else if(msg==2){newdirection=4;}
+else if(msg==3){newdirection=1;}
+else{}// should never be anything but 1, 2, 3
+}
+return newdirection;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
-	head = 49; // general middle left side of screen to give player time to react
-	snakedirection = 2;
-	int snakepositions[20]={0}; // sets array of positions to all 0
-	appendsnake(49, true, 0); // adds the single head to the snake positions
-	//snakepositions[0]=49;
-	//snakepositions[0]=0;	//-----------when using line above, this clears the square that never goes away ---------
-	//calcsnakelength(); // recalcualtes snake length
-	int fruit = 153; // starting fruit will always be the same, in straight line away from start
-	fruitposition=57;
-	write_q(&Locations, snakepositions[0]);
-	write_q(&Locations, fruit);
-	gamestart=false;
+int future(int newdirection) // defines the next position of the snakes head
+{
+if (newdirection ==1){ futurehead=head-12;} //game is 8x12 squares, A north move is simply position - 12
+else if(newdirection ==2){ futurehead=head+1;}
+else if(newdirection ==3){ futurehead=head+12;}
+else if(newdirection ==4){ futurehead=head-1;}
+return futurehead;
 }
 
-void game(){ 
-	
-		int16_t msg; //variable from queue to be used, 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+bool checkboundcollision(int newdirection) //checks if the next position will hit any of the four walls
+{                                                        // as far as I can tell you cant return more than 1 parameter from fucntion without statically allocating mem
+                                                         // otherwise future and check bound collision can be combined
+int leftbound[8]={1,13,25,37,49,61,73,85}; //the 8 leftmost grid positions
+int rightbound[8]={12,24,36,48,60,72,84,96};
+bool hitbound=false;
+bool rightbord=valueinarray(rightbound,head, 8);
+bool leftbord=valueinarray(leftbound,head, 8);
+if(newdirection==2 && rightbord==true){ hitbound=true;}
+else if (newdirection==4 && leftbord==true){ hitbound=true;}
+if(futurehead<1 || futurehead>96){hitbound=true;}
+return hitbound;
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------------
+bool checkbodycollision(){
+bool collision = false;
+if(valueinarray(snakepositions, futurehead, 20)==true)
+{
+collision = true;
+}
+return collision;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+int game(){
+   
+    int newdirection;
+    int msg_send1;
+    int msg_send2;
+   
+    int16_t msg; //variable from queue to be used,
 		read_q(&Direction, &msg); // will be CWW,straight,or CW (1, 2, 3)
-		
-		
-	
-		if(gamestart==true){ initializesnake();}
-		else{
-			bool collision=false;
-			
-			int newdirection = updatedirection(msg); // new direction absed on input from queue
-			futurehead = future(newdirection, head); // new head position based on new dir and old head
-			
-			if (checkboundcollision(newdirection, head, futurehead)==true || checkbodycollision(futurehead)==true)
-				{ // checks if either type of collision has occured
-					collision=true;
-					write_q(&Locations, 123); // display task knows that 2 0's means game over
-					write_q(&Locations, 123);
-				} 
-			else{
-				
-				//appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
-				//head = futurehead;
-				//snakedirection = newdirection;
-				
-				//futurehead=generatenewfruit();
-				
-				if(checkfruitcollision(futurehead)==false)
-					{
-					write_q(&Locations, futurehead);
-						write_q(&Locations, snakepositions[0]);
-					}
-				else{
-						write_q(&Locations, generatenewfruit());
-						write_q(&Locations, 0);
-						}
-				appendsnake(futurehead, checkfruitcollision(futurehead), calcsnakelength()); // assuming function calls can be within a fucntion call
-				head = futurehead;
-				snakedirection = newdirection;
-					
-			}
-			
-			
-			
-			
-		}
-	
-		
-		
-		
-	
-	
-	
-	
-
-	}
+   
+    if(gamestart==true)
+        {
+        initializesnake();
+        }
+       
+    else{
+       
+        newdirection = updatedirection(msg);
+        futurehead=future(newdirection);
+       
+        if(checkboundcollision(newdirection)==true || checkbodycollision()==true)
+            {
+                write_q(&Locations, 123);
+                write_q(&Locations, 123);
+            }
+        else{
+                write_q(&Locations, head);
+                if(checkfruitcollision(futurehead)==true) //if it hits a fruit clear nothing
+                    { 
+										generatenewfruit();  // running this line makes it successfully generate the new fruit but it then still elaves the old fruit position in place
+										write_q(&Locations, fruitposition+96);
+										}
+                else
+                    {
+										write_q(&Locations, snakepositions[0]);
+										} // else clear oldest value before its appended
+                   
+               
+                appendsnake( checkfruitcollision(futurehead));
+                head = futurehead;
+                snakedirection=newdirection;
+            }
+         
+    }
+   
+   
+   
+   
+   
+   
+}

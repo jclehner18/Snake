@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
+/*
 int updatedirection(int msg);
 int future(int newdirection, int head);
 bool valueinarray(int array[], int search, int size);
@@ -14,3 +16,4 @@ void appendsnake(int futurehead, bool fruitcollision, int length);
 int calcsnakelength(void);
 void initializesnake(void);
 void game(void);
+*/
