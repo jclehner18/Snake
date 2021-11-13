@@ -18,6 +18,7 @@
 #include "main.h"
 
 
+void generatenewfruit();
 
 static int head;
 static int futurehead;
@@ -38,7 +39,8 @@ void appendsnake( bool fruitcollision) // updating the snakepositions array with
 if (fruitcollision==true)
     {
     length++;
-    void generatenewfruit();
+    generatenewfruit();
+		write_q(&Locations, fruitposition+96);
     snakepositions[length-1]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
     }
 
@@ -47,7 +49,7 @@ else{
     {                                                                    
     snakepositions[i]=snakepositions[i+1]; // shifts all positions, will erase the oldest loc
     }
-snakepositions[length-1]=futurehead; //adds in the new postion to the head spot
+		snakepositions[length-1]=futurehead; //adds in the new postion to the head spot
     }
 }
 
@@ -178,6 +180,9 @@ return collision;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 int game(){
+	 // the first piece written to the queue is what is read first by display ie msg
+	
+
    
     int newdirection;
     int msg_send1;
@@ -201,15 +206,18 @@ int game(){
                 write_q(&Locations, 123);
                 write_q(&Locations, 123);
             }
+						
         else{
-                write_q(&Locations, head);
+               write_q(&Locations, futurehead);
                 if(checkfruitcollision(futurehead)==true) //if it hits a fruit clear nothing
                     { 
-										generatenewfruit();  // running this line makes it successfully generate the new fruit but it then still elaves the old fruit position in place
-										write_q(&Locations, fruitposition+96);
+										//generatenewfruit();  // running this line makes it successfully generate the new fruit but it then still elaves the old fruit position in place
+										
+										//write_q(&Locations, fruitposition+96);
 										}
                 else
                     {
+										
 										write_q(&Locations, snakepositions[0]);
 										} // else clear oldest value before its appended
                    
@@ -217,11 +225,13 @@ int game(){
                 appendsnake( checkfruitcollision(futurehead));
                 head = futurehead;
                 snakedirection=newdirection;
+										
+								//write_q(&Locations, futurehead);
+								//write_q(&Locations, snakepositions[0]);
+								
             }
          
     }
-   
-   
    
    
    

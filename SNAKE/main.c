@@ -25,69 +25,191 @@ int main()
 	init_queue(&Locations, 2);
 	
 	Display();
+	write_q(&Direction, 2); // first thing you send means nothing as it is initializing snake
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	
+	/*
+	write_q(&Direction, 2);
+	game();
+	Display();
+	
+	write_q(&Direction, 2);
+	game();
+	Display();
+	
+	write_q(&Direction, 2);
+	game();
+	Display();
+	
+	write_q(&Direction, 2);
+	game();
+	Display();
+	*/
+	
+	                           //sequence for hitting 4 fruits
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
 	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
 	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 3);
-	game();
-	Display();
-	write_q(&Direction, 2);
-	game();
-	Display();
-	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
 	write_q(&Direction, 1);
-	game();
-	Display();
-	write_q(&Direction, 1);
-	game();
-	Display();
-	write_q(&Direction, 2); //original fruit doesnt disappear and it is recognized as part of the snake. once fruit is hit, the other square is the new snake, nothing gets appended
+	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
 	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 1);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 3);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+		write_q(&Direction, 1);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	write_q(&Direction, 1);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+		write_q(&Direction, 1);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+		write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+		write_q(&Direction, 2);
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+	
 	
 	/*
 	write_q(&Direction, 2);

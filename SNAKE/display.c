@@ -247,14 +247,18 @@ while(randomcondition==true){
 	
 	
 	if(msg==123 && msg2==123){gameoveranimation();} // will have logic for game over animation
-	else{DrawSquare(msg);}
-	for (volatile int32_t i = 0; i < 123456; i++){}
+	else{
+	ClearSquare(msg2);
+	//DrawSquare(msg);
+	}
+	//for (volatile int32_t i = 0; i < 123456; i++){}
 	if(msg2>96){
 		msg2=msg2-96;
 		DrawSquare(msg2);
 	  }
 	else{
-		ClearSquare(msg2);
+		DrawSquare(msg);
+		//ClearSquare(msg2);
 	}
 	//for (volatile int32_t i = 0; i < 123456; i++){}
 	
