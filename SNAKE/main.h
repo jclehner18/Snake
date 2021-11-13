@@ -6,6 +6,7 @@
 #include "display.h"
 #include "game.h"
 #include "led.h"
+#include "knob.h"
 //#include "queue.c"
 
 

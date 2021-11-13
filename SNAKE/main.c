@@ -18,6 +18,11 @@ queue_t light;
 
 int main()
 {
+	//RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
+	//GPIOB->MODER &= ~GPIO_MODER_MODE12_Msk;
+   // GPIOB->MODER |= 1 << GPIO_MODER_MODE12_Pos;
+	
+		//GPIOB->BSRR = GPIO_BSRR_BS_12;
 	
 	
 	 // queue for use from game logic to display
@@ -25,6 +30,11 @@ int main()
 	init_queue(&Locations, 2);
 	
 	Display();
+	write_q(&Direction, 2); // first thing you send means nothing as it is initializing snake
+	for (volatile int32_t i = 0; i < 123456; i++){}
+	game();
+	Display();
+		
 	write_q(&Direction, 2); // first thing you send means nothing as it is initializing snake
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
@@ -49,7 +59,7 @@ int main()
 	*/
 	
 	                           //sequence for hitting 4 fruits
-	write_q(&Direction, 2);
+/*	write_q(&Direction, 2);
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
@@ -208,9 +218,14 @@ int main()
 		write_q(&Direction, 2);
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
-	Display();
+	Display();  */
 	
-	
+while(1){
+		knob();
+		game();
+		Display();
+}
+		
 	/*
 	write_q(&Direction, 2);
 	write_q(&Locations, 23); // once dispaly can read we can test its entire functionality with dummy data
@@ -223,13 +238,13 @@ int main()
 	
 	Display();*/
 	
-	init_queue(&light, 1);
-	write_q(&light, 400);
+	//init_queue(&light, 1);
+	//write_q(&light, 400);
 	
-	led();
+	//led();
 	
-	//init_queue(&knob_action, 1);
-	//write_q(&light, update_btn(&quad_A)); //cant pass quad_a
+
+	
 	
 	//TODO: knob queue
 	//TODO: LED queue
