@@ -209,7 +209,7 @@ int main()
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
 	Display();
-	
+		
 	
 	/*
 	write_q(&Direction, 2);
