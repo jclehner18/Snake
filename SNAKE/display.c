@@ -250,7 +250,7 @@ while(randomcondition==true){
 	else{
 	ClearSquare(msg2);
 	//DrawSquare(msg);
-	}
+	//}
 	//for (volatile int32_t i = 0; i < 123456; i++){}
 	if(msg2>96){
 		msg2=msg2-96;
@@ -259,7 +259,7 @@ while(randomcondition==true){
 	else{
 		DrawSquare(msg);
 		//ClearSquare(msg2);
-	}
+	}}
 	//for (volatile int32_t i = 0; i < 123456; i++){}
 	
 // simulated snake movement

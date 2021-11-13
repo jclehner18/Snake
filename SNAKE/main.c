@@ -218,7 +218,9 @@ int main()
 		write_q(&Direction, 2);
 	for (volatile int32_t i = 0; i < 123456; i++){}
 	game();
+<<<<<<< HEAD
 	Display();  */
+
 	
 while(1){
 		knob();

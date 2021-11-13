@@ -85,7 +85,7 @@ int knob()
 		{
 			
 			
-			for(int32_t i =0; i < 12345; i++)
+			for(int32_t i =0; i < 123456; i++)
 			{
 				if(hasWritten == false)
 				{
@@ -101,7 +101,7 @@ int knob()
 					if(eB == INACTIVE)
 					{
 						//GPIOA->ODR = 0 << 5;
-						msg = 2;
+						msg = 1;
 						hasWritten = true;
 					}
 					else if(eB==ACTIVE)
@@ -118,7 +118,7 @@ int knob()
 	}
 			if(hasWritten == false) {msg = 2;}
 				
-			write_q(&Direction, &msg);
+			write_q(&Direction, msg);
 			
 			
 			

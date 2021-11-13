@@ -60,7 +60,7 @@ void initializesnake(){ // will run at the start of game, set the snake position
 head = 49; // general middle left side of screen to give player time to react
 snakedirection = 2;
 int snakepositions[20]={0}; // sets array of positions to all 0
-
+length=1;
 futurehead=49;
 appendsnake( false);
 int fruit = 153; // starting fruit will always be the same, in straight line away from start
@@ -205,6 +205,7 @@ int game(){
             {
                 write_q(&Locations, 123);
                 write_q(&Locations, 123);
+							  gamestart=true;
             }
 						
         else{
