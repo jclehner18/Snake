@@ -223,6 +223,7 @@ int main()
 
 	
 while(1){
+		led();
 		knob();
 		game();
 		Display();

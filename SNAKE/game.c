@@ -39,6 +39,7 @@ void appendsnake( bool fruitcollision) // updating the snakepositions array with
 if (fruitcollision==true)
     {
     length++;
+		write_q(&light, length);
     generatenewfruit();
 		write_q(&Locations, fruitposition+96);
     snakepositions[length-1]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array

@@ -85,7 +85,7 @@ int knob()
 		{
 			
 			
-			for(int32_t i =0; i < 123456; i++)
+			for(int32_t i =0; i < 12345; i++)
 			{
 				if(hasWritten == false)
 				{
@@ -94,8 +94,8 @@ int knob()
 			eA = update_btn(&quad_A);
 			if(eA == ACTIVE)
 			{
-				//for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
-				//{														//all if statements could potentially be inside for loop.
+				for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
+				{														//all if statements could potentially be inside for loop.
 																//this has not been tested, so not entirely sure if this actually works
 					eB = update_btn(&quad_B);
 					if(eB == INACTIVE)
@@ -112,20 +112,40 @@ int knob()
 						
 					}
 				
-				//}
+				}
 			}
 		}
+				else{
+					eA = update_btn(&quad_A);
+			if(eA == ACTIVE)
+			{
+				for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
+				{														//all if statements could potentially be inside for loop.
+																//this has not been tested, so not entirely sure if this actually works
+					eB = update_btn(&quad_B);
+					if(eB == INACTIVE)
+					{
+						msg = 1;
+						hasWritten = true;
+					}
+					else if(eB==ACTIVE)
+					{
+						msg = 3;
+						hasWritten = true;
+						
+					}
+				}
 	}
+}
+}
 			if(hasWritten == false) {msg = 2;}
-				
+			hasWritten = true;
 			write_q(&Direction, msg);
-			
-			
-			
-			//GPIOB->BSRR = GPIO_BSRR_BS_12;
+				
+			hasWritten = false;
 			knobWhileLoop = false;
 		}
-		GPIOB->BSRR = GPIO_BSRR_BR_12;
+
 }
 
 

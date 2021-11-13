@@ -14,6 +14,21 @@ void config_gpio(void)
 
 int led(void)
 {
+	
+	
+	int16_t msg;
+	//bool queueContents;
+	//queueContents = read_q(&light , &msg);
+	read_q(&light, &msg);
+	
+	msg = 500-(msg*25);
+	
+	//if(queueContents == true)
+	//{
+	TIM21->ARR = msg; //low numbers = bright, high numbers = dim
+		
+	
+	
 	config_gpio();
 	
 	RCC->APB2ENR |= RCC_APB2ENR_TIM21EN;
@@ -23,12 +38,11 @@ int led(void)
 	TIM21->CCER |= TIM_CCER_CC1E;
 	TIM21->CR1 |= TIM_CR1_CEN; //enable counter
 	TIM21->EGR |= TIM_EGR_UG; //force update
+		
+	//}
 	
-	int16_t msg;
-	read_q(&light, &msg);
-	TIM21->ARR = msg; //low numbers = bright, high numbers = dim
 	
-	while(1)
-	{
-	}
+	
+	
+	
 }
