@@ -1,56 +1,53 @@
 // display task rework by Josiah Mortorff
 // Reworked version 11/7/21
-// rewrote entire display code in order to solve various issues
-// This task will read input from a queue and display them to the display, it will read one square to display and one square to clear
-
-// Initialization is still all in this task it will need moved to main at some point.
+// This task will read 2 inputs from a queue and display them to the display, it will read one square to display and one square to clear
 
 
 #include "display.h"
 #include "main.h"
-static bool randomcondition=true; // used in the while loop, loop while randomcondition == true
-static bool Isinitialized =false;
+
+static bool Isinitialized =false; // used to keep track of if the display has been initiailized
 
 
 void init_gpio(void)
 {
-RCC->IOPENR |= RCC_IOPENR_GPIOAEN; // Supply clock to GPIO
-GPIOA->MODER &= ~(GPIO_MODER_MODE4_Msk); // clear PA4
-GPIOA->MODER |= 1 << GPIO_MODER_MODE4_Pos; // Set PA4 to output (01)
-GPIOA->MODER &= ~(GPIO_MODER_MODE5_Msk); // clear PA5
-GPIOA->MODER |= 2 << GPIO_MODER_MODE5_Pos; // set PA5 to Alternate Function mode (10)
-GPIOA->MODER &= ~(GPIO_MODER_MODE7_Msk); // clear PA7
-GPIOA->MODER |= 2 << GPIO_MODER_MODE7_Pos; // set PA7 to alternate function mode (10)
-GPIOA->MODER &= ~(GPIO_MODER_MODE1_Msk); //clear PA1
-GPIOA->MODER |= 1 << GPIO_MODER_MODE1_Pos ; // set PA1 to output (01)
-GPIOA->MODER &= ~(GPIO_MODER_MODE0_Msk); // Clear PA0
-GPIOA->MODER |= 1<< GPIO_MODER_MODE0_Pos; // set PA0 to output (01)
+RCC->IOPENR |= RCC_IOPENR_GPIOAEN; 
+GPIOA->MODER &= ~(GPIO_MODER_MODE4_Msk); 
+GPIOA->MODER |= 1 << GPIO_MODER_MODE4_Pos; // PA4 to output
+GPIOA->MODER &= ~(GPIO_MODER_MODE5_Msk); 
+GPIOA->MODER |= 2 << GPIO_MODER_MODE5_Pos; // PA5 to Alternate Function 
+GPIOA->MODER &= ~(GPIO_MODER_MODE7_Msk); 
+GPIOA->MODER |= 2 << GPIO_MODER_MODE7_Pos; // PA7 to alternate function 
+GPIOA->MODER &= ~(GPIO_MODER_MODE1_Msk); 
+GPIOA->MODER |= 1 << GPIO_MODER_MODE1_Pos ; // PA1 to output 
+GPIOA->MODER &= ~(GPIO_MODER_MODE0_Msk); 
+GPIOA->MODER |= 1<< GPIO_MODER_MODE0_Pos; // PA0 to output 
 }
 
 void init_spi(void)
 {
-// rewrote spi initialization, seemed to be the root of alot of general issue with writting to the display
-// Compared to some other groups spi initialization from the display lab
-// alot of previous code utilized &=~ which appears unneeded
-	
+
+// SPI seemed to be cause of some column issues, when rewritting the code 
+//some other groups spi initialization from the display lab was referenced for trouble shooting
+
 RCC->APB2ENR |= (1U << RCC_APB2ENR_SPI1EN_Pos);
 SPI1->CR1 |= (1U << SPI_CR1_CPHA_Pos);
 SPI1->CR1 |= (1U << SPI_CR1_CPOL_Pos);
-SPI1->CR1 |= (1U << SPI_CR1_MSTR_Pos); // Set to Master Configuration
-SPI1->CR1 |= (1U << SPI_CR1_SSI_Pos); // SSI
-SPI1->CR1 |= (1U << SPI_CR1_SSM_Pos) ; // slave management 
+SPI1->CR1 |= (1U << SPI_CR1_MSTR_Pos); // Master Configuration
+SPI1->CR1 |= (1U << SPI_CR1_SSI_Pos); 
+SPI1->CR1 |= (1U << SPI_CR1_SSM_Pos) ; 
 SPI1->CR1 |= (3U << SPI_CR1_BR_Pos); // fPCLK/16
 SPI1->CR1 |= (SPI_CR1_SPE); // Peripheral enabled
 }
 
 void reset(void) 
 { 
-GPIOA->ODR |= (1U << 0);// 0 is the reset line    // old code used really long wasteful ammounts of time here
-for( volatile int32_t n =0; n<8; n++){}// delay loop to give the line enough time high / low
+GPIOA->ODR |= (1U << 0); // PA0 is the reset line, originally wasted way more time than needed here so it was reduced
+for( volatile int16_t n =0; n<8; n++){} // delay loop to give the line enough time high / low
 GPIOA->ODR &= ~(1U << 0);
-for( volatile int32_t n =0; n<16; n++){}
+for( volatile int16_t n =0; n<16; n++){}
 GPIOA->ODR |= (1U <<0);
-for( volatile int32_t n =0; n<8; n++){}
+for( volatile int16_t n =0; n<8; n++){}
 }
 
 void init_display(void)
@@ -64,20 +61,20 @@ send_packet(0xA2);
 send_packet(0x2F);
 send_packet(0x27);
 send_packet(0x81);
-send_packet(0x10); // still not sending FA and 90, shouldnt be needed
+send_packet(0x10); // not sending FA and 90, aren't needed for our purposes
 send_packet(0xAF);
 }
 
-void send_packet(uint32_t packet)
+void send_packet(uint16_t packet)
 {
-GPIOA->ODR &= ~(1U << 4); // CS0
+GPIOA->ODR &= ~(1U << 4); // CSO
 SPI1->DR = packet;
 for( volatile int16_t n =0; n<5; n++){}
-while( SPI1->SR & SPI_SR_BSY) {} //loop until SPI completed.  Not sure if this is a busy wait will need to verify its allowed
+while( SPI1->SR & SPI_SR_BSY) {} //loop until SPI completed.  Not sure if this is a busy wait will need to verify its allowed ------------------------------------------------------------
 GPIOA->ODR |= (1U << 4);
 }
 
-void CDLow (void) // easier than remembering which ouput is the CD line
+void CDLow (void) // a function is easier than remembering which ouput is the CD line
 {
 GPIOA->ODR &= ~(1U << 1);// Sets PA1 low
 }
@@ -93,32 +90,33 @@ void clear_all(void)
 	for(int16_t m=1; m<9; m++) // loops through each page
 	{
 		set_page(m);
-		for (int16_t m=0; m<102; m++)// sets the length of the page to 0
-			{send_packet(0x00);}
+		for (int16_t m=0; m<102; m++)// size of 102 because display is 102 long
+			{send_packet(0x00);} // value send is hex 0x00 = none 0xFF = all
 	}
 }
 
-void column_reset(void)
+void column_reset(void) // resets the column position to the start of the page
 {
-CDLow();
+CDLow(); // cd set low to send commands
 send_packet(0x00); // LSB to 0
 send_packet(0x10); // MSB to 0
 CDHigh();
 }
 
 
-void set_page(uint32_t page){ // should be an int 1-8 and will set the corrosponding page
-CDLow();// CD low to write commands
-int page0address = 176; // starting dec value for page 0
-int newpage = page0address+(page-1); // page - 1 because page 1 is = page 0 but 1 makes more sense
-send_packet(newpage);
-column_reset();// resets the columns on page change
-CDHigh();
-}
+void set_page(uint16_t page) // takes int value 1-8 and will set the corrosponding page
+	{ 
+		CDLow();// CD low to write commands
+		int page_0 = 176; // 176 = B0 which is the command for the first page position
+		int newpage = page_0+(page-1); // page - 1 because page 1 is = page 0 but 1 makes more sense
+		send_packet(newpage);
+		column_reset();// resets the columns on page change
+		CDHigh();
+	}
 
 
-void set_square(uint32_t x){ // takes a column fro 1-12 and draws a square in that spot
-CDLow();
+void set_square(uint16_t x){ // takes a int from 1-12 and draws a square in that spot (we are only displaying in an 8x12 grid)
+CDLow(); // command mode
 if(x==1){send_packet(0x10); send_packet(0x00);} 
 else if(x==2){send_packet(0x08); } // LSB of 8 is just 8 pixels or 1 square over
 else if(x==3){send_packet(0x11); }
@@ -132,16 +130,16 @@ else if(x==10){send_packet(0x14); send_packet(0x08); }
 else if(x==11){send_packet(0x15); }
 else if(x==12){send_packet(0x15); send_packet(0x08); }
 CDHigh();
-for(int16_t m=0; m<8; m++)
+for(int16_t m=0; m<8; m++) // for fanicier displays this could easily be changed
 {
-send_packet(0xFF); // doesnt have to be a solid sqaure but thats the easiest
+send_packet(0xFF); // solid square
 }
 column_reset();
 }
 
 
-void clear_square(uint32_t x){
-CDLow(); // command mode
+void clear_square(uint16_t x){ // same functionality as draw square but it will send 0x00 8 times to the display
+CDLow(); 
 if(x==1){send_packet(0x10); send_packet(0x00);}
 else if(x==2){send_packet(0x08); }
 else if(x==3){send_packet(0x11); }
@@ -162,62 +160,63 @@ send_packet(0x00);
 column_reset();
 }
 
-void DrawSquare(int BoardPosition){
-	int column = (BoardPosition % 12); // sets the column as the remainder after a division by 12
-	int page = (BoardPosition / 12.01)+1; // the 0.01 is for end values 12/12=1 but it is still page 1  // +1 because set page accepts values 1-8 not 0
+void DrawSquare(int16_t BoardPosition){ // takes the board position 0-96 and converts it to corresponding page and column
+	int16_t column = (BoardPosition % 12); // sets the column as the remainder after a division by 12
+	int16_t page = (BoardPosition / 12.01)+1; // the 0.01 is for end values 12/12=1 but it is still page 1  // +1 because set page accepts values 1-8 not 0
 	if (column==0){column=12;} // for instances with no remainder 96%12=0 which will always be column 12
 	set_page(page);
 	set_square(column);
 }
 
-void ClearSquare(int BoardPosition){
-	int column = (BoardPosition % 12); // sets the column as the remainder after a division by 12
-	int page = (BoardPosition / 12.01)+1; // the 0.01 is for end values 12/12=1 but it is still page 1  // +1 because set page accepts values 1-8 not 0
+void ClearSquare(int16_t BoardPosition){ // same as DrawSquare but clears the position
+	int16_t column = (BoardPosition % 12); // sets the column as the remainder after a division by 12
+	int16_t page = (BoardPosition / 12.01)+1; // the 0.01 is for end values 12/12=1 but it is still page 1  // +1 because set page accepts values 1-8 not 0
 	if (column==0){column=12;} // for instances with no remainder 96%12=0 which will always be column 12
 	set_page(page);
 	clear_square(column);
 }
 
-void gameoveranimation(){ // simple animation to play on gameover
-	for (volatile int32_t i = 1; i <= 12; i++){
-for (volatile int32_t i = 0; i < 123456; i++){}
-DrawSquare(i);
-DrawSquare(i+12);
-DrawSquare(i+24);
-DrawSquare(i+36);
-DrawSquare(i+48);
-DrawSquare(i+60);
-DrawSquare(i+72);
-DrawSquare(i+84);
-	
-ClearSquare(i+12-1);
-ClearSquare(i+24-1);
-ClearSquare(i+36-1);
-ClearSquare(i+48-1);
-ClearSquare(i+60-1);
-ClearSquare(i+72-1);
-ClearSquare(i+84-1);
-ClearSquare(i-1);
-	
-	if(i==12){
-		for (volatile int32_t i = 0; i < 123456; i++){}
-		ClearSquare(i+12);
-		ClearSquare(i+24);
-		ClearSquare(i+36);
-		ClearSquare(i+48);
-		ClearSquare(i+60);
-		ClearSquare(i+72);
-		ClearSquare(i+84);
-		ClearSquare(i);
+void gameoveranimation(){ // simple animation to play on gameover, alse serves to clear leftover pieces being displayed
+	for (volatile int16_t i = 1; i <= 12; i++) // runs 12 times, once for each column
+	{
+		for (volatile int32_t i = 0; i < 123456; i++){} // delay to show the animation so its not instant
+		DrawSquare(i); // draws a vertical bar corresponding with i = column position
+		DrawSquare(i+12);
+		DrawSquare(i+24);
+		DrawSquare(i+36);
+		DrawSquare(i+48);
+		DrawSquare(i+60);
+		DrawSquare(i+72);
+		DrawSquare(i+84);
+			
+		ClearSquare(i+12-1); // clears the previous vertical bar
+		ClearSquare(i+24-1);
+		ClearSquare(i+36-1);
+		ClearSquare(i+48-1);
+		ClearSquare(i+60-1);
+		ClearSquare(i+72-1);
+		ClearSquare(i+84-1);
+		ClearSquare(i-1);
+			
+			if(i==12){ // clears the lines once it reaches the end
+				for (volatile int32_t i = 0; i < 123456; i++){}
+				ClearSquare(i+12);
+				ClearSquare(i+24);
+				ClearSquare(i+36);
+				ClearSquare(i+48);
+				ClearSquare(i+60);
+				ClearSquare(i+72);
+				ClearSquare(i+84);
+				ClearSquare(i);
+			}
 	}
 }
-}
 
-//int main(void)
+
 void Display()
 {
-if (Isinitialized==false){ // will only run on first call
-init_gpio(); // all the initialization stuff for the display will need moved to start of actual main / their own function
+if (Isinitialized==false){ // runs through all the required startup procedures, uses bool condition to only do this the first time display is used
+init_gpio(); 
 CDLow();
 init_spi() ;
 reset();
@@ -227,84 +226,32 @@ clear_all();
 Isinitialized=true;
 }
 else{
-
-randomcondition=true; // stuff only works in the while loop, this is a dummy holder
-
-while(randomcondition==true){
-// just testing positioning, seem to be all working
-	
-// will be reading 2 values from a queue, a draw square and a clear square	
-// it will never have to draw more than 1 square in any given move
-
+	// will be reading 2 values from a queue, a draw square and a clear square, there are instances display will handle
 	// Standard move: Draw new head and clear old head
-	// Gained fruit: Draw new fruit, no clear as snake gets bigger
+	// Initalization: Draw head and draw new fruit
 	
-	int16_t msg;
-	int16_t msg2;
-	read_q(&Locations, &msg);  // cant seem to figure this out
+	int16_t msg; // the first message written / message to be drawn
+	int16_t msg2; //second message / message to be cleared
+	read_q(&Locations, &msg);  
 	read_q(&Locations, &msg2);
 	
-	
-	
-	if(msg==123 && msg2==123){gameoveranimation();} // will have logic for game over animation
+	if(msg==123 && msg2==123) // the game will send these 2 values on game over, their value is arbitrary as long as its not two values that would normally be used
+		{
+			gameoveranimation();
+		} 
 	else{
-	ClearSquare(msg2);
-	//DrawSquare(msg);
-	//}
-	//for (volatile int32_t i = 0; i < 123456; i++){}
-	if(msg2>96){
-		msg2=msg2-96;
-		DrawSquare(msg2);
-	  }
-	else{
-		DrawSquare(msg);
-		//ClearSquare(msg2);
-	}}
-	//for (volatile int32_t i = 0; i < 123456; i++){}
-	
-// simulated snake movement
-	//DrawSquare(msg);
-	//DrawSquare(msg2);
-	
-	/*
-DrawSquare(39);
-for (volatile int32_t i = 0; i < 123456; i++){}
-
-DrawSquare(40);
-ClearSquare(39);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(41);
-ClearSquare(40);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(42);
-ClearSquare(41);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(30);
-ClearSquare(42);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(29);
-ClearSquare(30);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(28);
-ClearSquare(29);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-DrawSquare(16);
-ClearSquare(28);
-for (volatile int32_t i = 0; i < 123456; i++){}
-	
-gameoveranimation(); // gamover also functions as a clear screen
-	*/
-	
-randomcondition = false;
-
-}
-}
+			ClearSquare(msg2);
+		
+			if(msg2>96) // there is one instance where 2 squares must be drawn, on game start. to accomodate this any message > 96 for msg2 will also be drawn
+					{
+						msg2=msg2-96; // if 2 things need drawn the placedment desired + 96 is received
+						DrawSquare(msg2);
+					}
+			else{
+				DrawSquare(msg);
+					}
+			}
+	}
 
 
 }
