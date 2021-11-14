@@ -12,7 +12,7 @@ void config_gpio(void)
 	GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPD13_Msk);
 }
 
-int led(void)
+void led(void)
 {
 	
 	
@@ -41,8 +41,5 @@ int led(void)
 		
 	//}
 	
-	
-	
-	
-	
+
 }

@@ -3,15 +3,9 @@
 // REQUIRED HARDWARE================
 // Active-low btn on PB3 = N.O. momentary between PB3 & ground
 // NUCLEO LABELING (PB3 is Arduino Header PWM/D3)
-
-#include "stm32l053xx.h"
-#include "stdint.h"
-#include "fsm_btn.h"
 #include "main.h"
 
 
-void gpio_init(void);
-int knob(void);
 static bool knobWhileLoop;
 static bool hasWritten = false;
 // Config PB3 as input with pull-up.
@@ -28,33 +22,13 @@ void gpio_init()
     GPIOB->MODER |= 0 << GPIO_MODER_MODE9_Pos; // PB9 Digital INPUT
     GPIOB->PUPDR &= ~GPIO_PUPDR_PUPD9_Msk;
     GPIOB->PUPDR |= 0x01 << GPIO_PUPDR_PUPD9_Pos; // Pull-up engaged
-    
-    //RCC->IOPENR |= RCC_IOPENR_GPIOAEN;
-    //GPIOA->MODER &= ~GPIO_MODER_MODE5_Msk;
-    //GPIOA->MODER |= 1 << GPIO_MODER_MODE5_Pos;  // PA5 DIGITAL OUTPUT    
-	
-	//-------------------------------------------------------------------------
-	
-	
-    GPIOB->MODER &= ~GPIO_MODER_MODE12_Msk;
-    GPIOB->MODER |= 1 << GPIO_MODER_MODE12_Pos;
-	
-	
-	//-------------------------------------------------------------------------
-	
-	
-	
 }
 
 
-int knob()
+void knob(void)
 {
 	int16_t msg;
 	msg =2;
-	GPIOB->BSRR = GPIO_BSRR_BS_12;
-	
-	
-	
 	
     static struct btn_struct quad_A = {.mask_for_btn= 0<<8, 
                                       .pin_ptr = &(GPIOB->IDR),

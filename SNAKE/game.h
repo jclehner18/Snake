@@ -14,6 +14,6 @@ bool checkbodycollision(int futurehead);
 bool checkfruitcollision(int futurehead);
 void appendsnake(int futurehead, bool fruitcollision, int length);
 int calcsnakelength(void);
-void initializesnake(void);
+void initializesnake(void);*/
+
 void game(void);
-*/

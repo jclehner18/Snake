@@ -4,4 +4,4 @@
 #include <stdint.h>
 
 void config_io(void);
-int led(void);
+void led(void);

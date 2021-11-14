@@ -180,7 +180,7 @@ return collision;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
-int game(){
+void game(void){
 	 // the first piece written to the queue is what is read first by display ie msg
 	
 
