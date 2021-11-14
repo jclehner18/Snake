@@ -15,23 +15,27 @@ void config_gpio(void)
 void led(void)
 {
 	
+	config_gpio();
 	
 	int16_t msg;
-	//bool queueContents;
-	//queueContents = read_q(&light , &msg);
+	bool queueContents;
+	queueContents = read_q(&light , &msg);
 	read_q(&light, &msg);
 	
 	msg = 500-(msg*25);
 	
 	//if(queueContents == true)
 	//{
-	TIM21->ARR = msg; //low numbers = bright, high numbers = dim
-		
-	
-	
-	config_gpio();
+	//TIM21->ARR = msg; //low numbers = bright, high numbers = dim
+	//}
 	
 	RCC->APB2ENR |= RCC_APB2ENR_TIM21EN;
+	
+	if(queueContents == true)
+	{
+	TIM21->ARR = msg; //low numbers = bright, high numbers = dim
+	}
+	
 	TIM21->PSC = 15; //prescale to 15, so APBCLK/16 = 1MHz
 	TIM21->CCR1 = 4; //signal high for 4us
 	TIM21->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE; //pwm mode 1 (110) preload enabled (1), active high polarity
@@ -39,7 +43,4 @@ void led(void)
 	TIM21->CR1 |= TIM_CR1_CEN; //enable counter
 	TIM21->EGR |= TIM_EGR_UG; //force update
 		
-	//}
-	
-
 }

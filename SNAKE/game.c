@@ -43,7 +43,7 @@ if (fruitcollision==true)
     generatenewfruit();
 		write_q(&Locations, fruitposition+96);
     snakepositions[length-1]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
-    }
+		}
 
 else{
     for(int i=0; i<length; i++)
