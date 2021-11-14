@@ -38,6 +38,7 @@ void appendsnake( bool fruitcollision) // updating the snakepositions array with
 {
 if (fruitcollision==true)
     {
+				
     length++;
 		write_q(&light, length);
     generatenewfruit();
@@ -62,6 +63,7 @@ head = 49; // general middle left side of screen to give player time to react
 snakedirection = 2;
 int snakepositions[20]={0}; // sets array of positions to all 0
 length=1;
+write_q(&light, 0);
 futurehead=49;
 appendsnake( false);
 int fruit = 153; // starting fruit will always be the same, in straight line away from start
@@ -183,7 +185,6 @@ return collision;
 void game(void){
 	 // the first piece written to the queue is what is read first by display ie msg
 	
-
    
     int newdirection;
     int msg_send1;
@@ -222,17 +223,11 @@ void game(void){
 										
 										write_q(&Locations, snakepositions[0]);
 										} // else clear oldest value before its appended
-                   
-               
                 appendsnake( checkfruitcollision(futurehead));
                 head = futurehead;
                 snakedirection=newdirection;
-										
-								//write_q(&Locations, futurehead);
-								//write_q(&Locations, snakepositions[0]);
 								
             }
-         
     }
    
    

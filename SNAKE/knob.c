@@ -59,13 +59,10 @@ void knob(void)
 		{
 			
 			
-			for(int32_t i =0; i < 12345; i++)
+			for(int32_t i =0; i < 22345; i++)
 			{
-				if(hasWritten == false)
-				{
-					
-			
 			eA = update_btn(&quad_A);
+					
 			if(eA == ACTIVE)
 			{
 				for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
@@ -74,13 +71,11 @@ void knob(void)
 					eB = update_btn(&quad_B);
 					if(eB == INACTIVE)
 					{
-						//GPIOA->ODR = 0 << 5;
 						msg = 1;
 						hasWritten = true;
 					}
 					else if(eB==ACTIVE)
 					{
-						//GPIOA->ODR = 1<<5;
 						msg = 3;
 						hasWritten = true;
 						
@@ -88,38 +83,14 @@ void knob(void)
 				
 				}
 			}
-		}
-				else{
-					eA = update_btn(&quad_A);
-			if(eA == ACTIVE)
-			{
-				for(int32_t i=0; i<1; i++) //for loop of range 1 makes a knob turn only 'active' for one turn. wont continue to make snake turn in circles.
-				{														//all if statements could potentially be inside for loop.
-																//this has not been tested, so not entirely sure if this actually works
-					eB = update_btn(&quad_B);
-					if(eB == INACTIVE)
-					{
-						msg = 1;
-						hasWritten = true;
-					}
-					else if(eB==ACTIVE)
-					{
-						msg = 3;
-						hasWritten = true;
-						
-					}
-				}
-	}
-}
 }
 			if(hasWritten == false) {msg = 2;}
-			hasWritten = true;
 			write_q(&Direction, msg);
 				
 			hasWritten = false;
 			knobWhileLoop = false;
 		}
-
+	
 }
 
 

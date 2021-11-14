@@ -2,6 +2,7 @@
 #include "led.h"
 #include "main.h"
 
+static bool led_initialization =false;
 void config_gpio(void)
 {
 	RCC->IOPENR|=RCC_IOPENR_GPIOBEN;
@@ -10,37 +11,36 @@ void config_gpio(void)
 	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_13);
 	GPIOB->AFR[1] |= (0x06 << GPIO_AFRH_AFSEL13_Pos);
 	GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPD13_Msk);
+
 }
 
 void led(void)
 {
+	RCC->APB2ENR |= RCC_APB2ENR_TIM21EN;
 	
-	config_gpio();
-	
+	if(led_initialization == false)
+		{
+			config_gpio();
+			TIM21->ARR = 2000;
+			led_initialization = true;
+		}
+
 	int16_t msg;
 	bool queueContents;
 	queueContents = read_q(&light , &msg);
-	read_q(&light, &msg);
-	
-	msg = 500-(msg*25);
-	
-	//if(queueContents == true)
-	//{
-	//TIM21->ARR = msg; //low numbers = bright, high numbers = dim
-	//}
-	
-	RCC->APB2ENR |= RCC_APB2ENR_TIM21EN;
-	
-	if(queueContents == true)
+	//msg = 500-(msg*25);   	//this will icrease brightness on a factor of 20, since it is not very noticable to human eye. -------this code will actaully meet out goal.
+	msg = 500-(msg*100);     //we are using this equation so you can tell a difference in brightness after each fruit pickup. -------this is for demonstration purposes.
+
+	if(queueContents == true || queueContents == 1)
 	{
-	TIM21->ARR = msg; //low numbers = bright, high numbers = dim
+		TIM21->ARR = msg; //low numbers = bright, high numbers = dim
 	}
-	
+
 	TIM21->PSC = 15; //prescale to 15, so APBCLK/16 = 1MHz
 	TIM21->CCR1 = 4; //signal high for 4us
 	TIM21->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE; //pwm mode 1 (110) preload enabled (1), active high polarity
 	TIM21->CCER |= TIM_CCER_CC1E;
 	TIM21->CR1 |= TIM_CR1_CEN; //enable counter
 	TIM21->EGR |= TIM_EGR_UG; //force update
-		
+	
 }
