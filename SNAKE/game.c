@@ -48,7 +48,9 @@ void appendsnake( bool fruitcollision) // updates the snakepositions array with 
 void initializesnake(){ // will run at the start of game, set the snake positions array to set starting point
 	head = 49; // general middle left side of screen to give player time to react
 	snakedirection = 2; // intial direction is east
-	int16_t snakepositions[20]={0}; // sets array of positions to all 0
+	for(int16_t i=0; i<=20; i++) // reset all pos in array
+	{snakepositions[i]=0;}
+	//int16_t snakepositions[20]={0}; // doesnt actually set all positions to 0 like originally thought
 	length=1;
 	write_q(&light, 0); // resets the light to dim
 	futurehead=49;
@@ -190,7 +192,7 @@ void game(void){
                 write_q(&Locations, 123);
 							  gamestart=true;
             }
-				else if(length>=7) // this is where the victory condition will be set, current set at 7 so its easy to demonstrate
+				else if(length>=4) // this is where the victory condition will be set, current set at 7 so its easy to demonstrate
 				{
 								write_q(&Locations, 124);
                 write_q(&Locations, 124);
