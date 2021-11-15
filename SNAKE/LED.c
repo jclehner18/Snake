@@ -27,8 +27,8 @@ void led(void)
 	int16_t msg;
 	bool queueContents;
 	queueContents = read_q(&light , &msg); //msg is length in game code appendsnake()
-	//msg = 500-(msg*25);   	//this will icrease brightness on a factor of 20, since it is not very noticable to human eye. -------this code will actually meet out goal.
-	msg = 500-(msg*100);     //we are using this equation so you can tell a difference in brightness after each fruit pickup. -------this is for demonstration purposes.
+	msg = 500-(msg*25);   	//this will icrease brightness on a factor of 20, since it is not very noticable to human eye. -------this code will actually meet out goal.
+	//msg = 500-(msg*100);     //we are using this equation so you can tell a difference in brightness after each fruit pickup. -------this is for demonstration purposes.
 
 	if(queueContents == true || queueContents == 1) //when a fruit is hit, length if snake is sent to queue, this checks for length of snake
 	{																								//changes brightness when length increases
