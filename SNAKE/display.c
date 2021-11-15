@@ -212,6 +212,66 @@ void gameoveranimation(){ // simple animation to play on gameover, alse serves t
 	}
 }
 
+void victoryanimation(){
+	clear_all();
+	DrawSquare(16); DrawSquare(17); DrawSquare(18); DrawSquare(19); DrawSquare(20); DrawSquare(21); // drawing a trophie,general shape shown via indents
+	DrawSquare(28); DrawSquare(29); DrawSquare(30); DrawSquare(31); DrawSquare(32); DrawSquare(33);
+									DrawSquare(41); DrawSquare(42); DrawSquare(43); DrawSquare(44);
+																	DrawSquare(55); DrawSquare(56);
+																	DrawSquare(67); DrawSquare(68);
+									DrawSquare(78); DrawSquare(79); DrawSquare(80); DrawSquare(81);
+	for (volatile int16_t i = 1; i <= 12; i++) // runs micro animation 12 times
+	{
+		int rem1 = i % 2;
+    if (rem1 == 0) // checks if num = even or odd and alternates based off that
+		{
+			for (volatile int32_t i = 0; i < 123456; i++){} // draws alternating pixels on side of display to give the animation some motion
+			DrawSquare(1); DrawSquare(11);
+			DrawSquare(14); DrawSquare(24);
+			DrawSquare(25); DrawSquare(35);
+			DrawSquare(38); DrawSquare(48);
+			DrawSquare(49); DrawSquare(59);
+			DrawSquare(62); DrawSquare(72);
+			DrawSquare(73); DrawSquare(83);
+			DrawSquare(86); DrawSquare(96);
+			for (volatile int32_t i = 0; i < 123456; i++){}
+			ClearSquare(2); ClearSquare(12);
+			ClearSquare(13); ClearSquare(23);
+			ClearSquare(26); ClearSquare(36);
+			ClearSquare(37); ClearSquare(47);
+			ClearSquare(50); ClearSquare(60);
+			ClearSquare(61); ClearSquare(71);
+			ClearSquare(74); ClearSquare(84);
+			ClearSquare(85); ClearSquare(95);
+
+			
+		}
+		else
+		{
+			for (volatile int32_t i = 0; i < 123456; i++){}
+			DrawSquare(2); DrawSquare(12);
+			DrawSquare(13); DrawSquare(23);
+			DrawSquare(26); DrawSquare(36);
+			DrawSquare(37); DrawSquare(47);
+			DrawSquare(50); DrawSquare(60);
+			DrawSquare(61); DrawSquare(71);
+			DrawSquare(74); DrawSquare(84);
+			DrawSquare(85); DrawSquare(95);
+			for (volatile int32_t i = 0; i < 123456; i++){}
+			ClearSquare(1); ClearSquare(11);
+			ClearSquare(14); ClearSquare(24);
+			ClearSquare(25); ClearSquare(35);
+			ClearSquare(38); ClearSquare(48);
+			ClearSquare(49); ClearSquare(59);
+			ClearSquare(62); ClearSquare(72);
+			ClearSquare(73); ClearSquare(83);
+			ClearSquare(86); ClearSquare(96);
+		}
+			
+	}
+	clear_all();// clears animation when finished
+}
+
 
 void Display()
 {
@@ -238,6 +298,10 @@ else{
 	if(msg==123 && msg2==123) // the game will send these 2 values on game over, their value is arbitrary as long as its not two values that would normally be used
 		{
 			gameoveranimation();
+		} 
+	else if(msg==124 && msg2==124) // the game will send these 2 values on game over, their value is arbitrary as long as its not two values that would normally be used
+		{
+			victoryanimation();
 		} 
 	else{
 			ClearSquare(msg2);

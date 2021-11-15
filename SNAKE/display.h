@@ -48,6 +48,9 @@ void ClearSquare(int16_t BoardPosition);
 // simple display sequence to be played on game over -> gameoveranimation();
 void gameoveranimation(void);
 
+// simple display sequence to be played on victory -> gameoveranimation();
+void victoryanimation(void);
+
 // actual display fuction, runs all of above -> Display();
 void Display(void);
 
