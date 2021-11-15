@@ -4,50 +4,41 @@
 // alternate mode to tracking positions is with [xpos, ypos] where each position requires 2 datapieces to make up its location an x and a y cord
 //still need to move stuff into header file, ect.
 
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include "stm32l053xx.h"
-//#include <stdbool.h>
-//#include <stdint.h>
-
-//#include <stdio.h>
-//#inlcude <stdint.h>
-//#include <stdbool.h>
 
 #include "game.h"
 #include "main.h"
 
 
-void generatenewfruit();
 
-static int head;
-static int futurehead;
-static int fruitposition;
+static int16_t head; //keeps track of the position of the snakes head
+static int16_t futurehead; // the position of the next snake head
+static int16_t fruitposition; // the position of the current fruit
+static int16_t snakedirection; // int for direction snake is moving N E S W -> 1 2 3 4
+static int16_t length=1; // value for tracking the length of the snake
 
-static bool fruitcollision;
-static bool gamestart=true;
-static int snakedirection;
-static int length=1;
-static int snakepositions[20];
+static bool fruitcollision; // bool for if the snake collided with the fruit
+static bool gamestart=true; // bool for if the game is starting
+
+static int snakepositions[20]; // array of current snake positions
 
 
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
-void appendsnake( bool fruitcollision) // updating the snakepositions array with new head position
+void appendsnake( bool fruitcollision) // updates the snakepositions array with new head position
 {
 if (fruitcollision==true)
     {
 				
     length++;
-		write_q(&light, length);
+		write_q(&light, length);// led changes brightness based on length
     generatenewfruit();
 		write_q(&Locations, fruitposition+96);
     snakepositions[length-1]=futurehead; // if a fruit is achieved the snake grows 1 spot so all values for position will remain the same but one new spot will be added to the array
 		}
 
 else{
-    for(int i=0; i<length; i++)
+    for(int16_t i=0; i<length; i++)
     {                                                                    
     snakepositions[i]=snakepositions[i+1]; // shifts all positions, will erase the oldest loc
     }
@@ -61,12 +52,12 @@ void initializesnake(){ // will run at the start of game, set the snake position
 
 head = 49; // general middle left side of screen to give player time to react
 snakedirection = 2;
-int snakepositions[20]={0}; // sets array of positions to all 0
+int16_t snakepositions[20]={0}; // sets array of positions to all 0
 length=1;
 write_q(&light, 0);
 futurehead=49;
 appendsnake( false);
-int fruit = 153; // starting fruit will always be the same, in straight line away from start
+int16_t fruit = 153; // starting fruit will always be the same, in straight line away from start
 fruitposition=57;
 write_q(&Locations, 49); // doesnt draw the first square -- stops the random square in the corner
 write_q(&Locations, fruit);
@@ -75,10 +66,10 @@ gamestart=false;
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
-bool valueinarray(int array[], int search, int size)// used in check boundcollision, checks if a given value is in a gven array
-{                                                   // couldnt seem to get this to work y checking size of array so im passing parameter size too
+bool valueinarray(int array[], int16_t search, int16_t size)// used in check boundcollision, checks if a given value is in a gven array // the array passed needs int as it it recienving array of size 20 at some point
+{                                                   
 bool isinarray=false;
-for (int i=0; i<size; i++)
+for (int16_t i=0; i<size; i++)
 {if(array[i]==search){isinarray=true; break;}}
 return isinarray;
 }
@@ -86,7 +77,7 @@ return isinarray;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
-bool checkfruitcollision(int futurehead){
+bool checkfruitcollision(int16_t futurehead){
 bool fruitcollision = false;
 if(futurehead==fruitposition)
 {
@@ -111,8 +102,8 @@ if(fruitposition>96){fruitposition=fruitposition/96;}
 
 
 
-int updatedirection(int msg){ // determines the direction the snake is moving after the input (N=1, E=2, S=3, W=4)
-int newdirection;
+int updatedirection(int16_t msg){ // determines the direction the snake is moving after the input (N=1, E=2, S=3, W=4)
+int16_t newdirection;
 if (snakedirection==1)
 {
 if(msg==1){newdirection=4;}//going N, turn CWW = W
@@ -146,7 +137,7 @@ return newdirection;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-int future(int newdirection) // defines the next position of the snakes head
+int future(int16_t newdirection) // defines the next position of the snakes head
 {
 if (newdirection ==1){ futurehead=head-12;} //game is 8x12 squares, A north move is simply position - 12
 else if(newdirection ==2){ futurehead=head+1;}
@@ -156,7 +147,7 @@ return futurehead;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
-bool checkboundcollision(int newdirection) //checks if the next position will hit any of the four walls
+bool checkboundcollision(int16_t newdirection) //checks if the next position will hit any of the four walls
 {                                                        // as far as I can tell you cant return more than 1 parameter from fucntion without statically allocating mem
                                                          // otherwise future and check bound collision can be combined
 int leftbound[8]={1,13,25,37,49,61,73,85}; //the 8 leftmost grid positions
@@ -186,9 +177,9 @@ void game(void){
 	 // the first piece written to the queue is what is read first by display ie msg
 	
    
-    int newdirection;
-    int msg_send1;
-    int msg_send2;
+    int16_t newdirection;
+    int16_t msg_send1;
+    int16_t msg_send2;
    
     int16_t msg; //variable from queue to be used,
 		read_q(&Direction, &msg); // will be CWW,straight,or CW (1, 2, 3)

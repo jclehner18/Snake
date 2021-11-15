@@ -4,16 +4,14 @@
 #include <stdbool.h>
 
 
-/*
-int updatedirection(int msg);
-int future(int newdirection, int head);
-bool valueinarray(int array[], int search, int size);
-bool checkboundcollision(int newdirection, int head, int futurehead);
-int generatenewfruit(void);
-bool checkbodycollision(int futurehead);
-bool checkfruitcollision(int futurehead);
-void appendsnake(int futurehead, bool fruitcollision, int length);
-int calcsnakelength(void);
-void initializesnake(void);*/
+void appendsnake( bool fruitcollision);
+void initializesnake();
+bool valueinarray(int array[], int16_t search, int16_t size);
+bool checkfruitcollision(int16_t futurehead);
+void generatenewfruit();
+int updatedirection(int16_t msg);
+int future(int16_t newdirection);
+bool checkboundcollision(int16_t newdirection);
+bool checkbodycollision();
 
 void game(void);
