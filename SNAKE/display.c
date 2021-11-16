@@ -1,6 +1,8 @@
 // display task rework by Josiah Mortorff
 // Reworked version 11/7/21
-// This task will read 2 inputs from a queue and display them to the display, it will read one square to display and one square to clear
+// This task is responsible for handling the everything to be drawn to the display. It will read two values from a queue: msg and msg2.
+// msg will alwasy be drawn, msg2 can clear a square or draw a square depending on the value. Display also knows if gameover or victory is achieved
+// based on the queue values.
 
 
 #include "display.h"
@@ -211,7 +213,7 @@ void gameoveranimation(){ // simple animation to play on gameover, alse serves t
 	}
 }
 
-void victoryanimation(){
+void victoryanimation(){ // animation on victory shows a trophie with special moveing animation on the sides
 	clear_all();
 	DrawSquare(16); DrawSquare(17); DrawSquare(18); DrawSquare(19); DrawSquare(20); DrawSquare(21); // drawing a trophie,general shape shown via indents
 	DrawSquare(28); DrawSquare(29); DrawSquare(30); DrawSquare(31); DrawSquare(32); DrawSquare(33);
@@ -246,7 +248,7 @@ void victoryanimation(){
 		else
 		{
 			for (volatile int32_t i = 0; i < 123456; i++){} // delay loop is to give time for animation to actually show
-			ClearSquare(1); ClearSquare(11);
+			ClearSquare(1); ClearSquare(11); // clears the pieces drawn in the alternating sequence.
 			ClearSquare(14); ClearSquare(24);
 			ClearSquare(25); ClearSquare(35);
 			ClearSquare(38); ClearSquare(48);
@@ -255,7 +257,7 @@ void victoryanimation(){
 			ClearSquare(73); ClearSquare(83);
 			ClearSquare(86); ClearSquare(96);
 			
-			DrawSquare(2); DrawSquare(12);
+			DrawSquare(2); DrawSquare(12); // displays the alternating places
 			DrawSquare(13); DrawSquare(23);
 			DrawSquare(26); DrawSquare(36);
 			DrawSquare(37); DrawSquare(47);

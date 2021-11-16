@@ -1,7 +1,10 @@
-// -	For the actual game logic. It will read input via queue (CW or CCW) and keep track of the game status. It will produce an output a value to draw and clear via queues.
+// game task - by: Josiah Mortorff
+// The actual game logic task. It will read input via queue from knob which will be a direction of turn / no turn.
+// and keep track of the game status. It will write to queue to the display and the LED the appropriate positions to draw.
+// The game task is responcible for all the game pieces such as the snake positions, fruit, as well as collision detection.
 
 //  game board is 8 x 12 places, each row consists of 12 places (columns) with 8 rows (pages) total
-//  each position is tracked with int -> 12x8 = 96 so every place gets a value
+//  each position is tracked with int -> 12x8 = 96 so every place gets a value from 1-96 
 
 #include "game.h"
 #include "main.h"
@@ -58,7 +61,7 @@ void initializesnake(){ // will run at the start of game, set the snake position
 	int16_t fruit = 153; // starting fruit will always be the same, in straight line away from start
 	fruitposition=57;
 	write_q(&Locations, 49); // doesnt draw the first square -- stops the random square in the corner
-	write_q(&Locations, fruit);
+	write_q(&Locations, fruit); // sends 153 instead of 57 as display knows to draw 2 squares if msg2>96
 	gamestart=false; // sets condition to false as this only runs on game restart
 }
 
@@ -135,7 +138,7 @@ int updatedirection(int16_t msg){ // updates the direction the snake is moving a
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-int future(int16_t newdirection) // defines the next position of the snakes head
+int future(int16_t newdirection) // takses the new direction of snake movement and assigns the future headstatic global
 {
 	if (newdirection ==1){ futurehead=head-12;} //game is 8x12 squares, A north move is simply position - 12
 	else if(newdirection ==2){ futurehead=head+1;} // going east is 1 to the right
@@ -145,7 +148,7 @@ int future(int16_t newdirection) // defines the next position of the snakes head
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
-bool checkboundcollision(int16_t newdirection) //checks if the next position will hit any of the four walls
+bool checkboundcollision(int16_t newdirection) //checks if the next position will hit any of the four walls based on new direction and current head
 {                                                        
 	int leftbound[8]={1,13,25,37,49,61,73,85}; //the 8 leftmost grid positions
 	int rightbound[8]={12,24,36,48,60,72,84,96};
@@ -160,7 +163,7 @@ bool checkboundcollision(int16_t newdirection) //checks if the next position wil
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------
-bool checkbodycollision(){
+bool checkbodycollision(){ // checks if futurehead is the same as any of the body positions of snake returns true/false
 	bool collision = false;
 	if(valueinarray(snakepositions, futurehead, 20)==true) // if futurehead pos is already in list of snake positions
 	{
@@ -176,7 +179,7 @@ void game(void){
     int16_t msg; //variable from queue to be used,
 		read_q(&Direction, &msg); // will be CWW,straight,or CW (1, 2, 3)
    
-    if(gamestart==true) // checks to see if game is starting
+    if(gamestart==true) // checks to see if game is starting if it is only do initializesnake();
         {
         initializesnake();
         }
@@ -194,7 +197,7 @@ void game(void){
             }
 				else if(length>=7) // this is where the victory condition will be set, current set at 7 so its easy to demonstrate
 				{
-								write_q(&Locations, 124);
+								write_q(&Locations, 124);// same as gameover animation, these two numbers are simply an trigger agreed upon by game and display
                 write_q(&Locations, 124);
 							  gamestart=true;
 				}
