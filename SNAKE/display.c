@@ -69,8 +69,7 @@ void send_packet(uint16_t packet)
 {
 GPIOA->ODR &= ~(1U << 4); // CSO
 SPI1->DR = packet;
-for( volatile int16_t n =0; n<5; n++){}
-while( SPI1->SR & SPI_SR_BSY) {} //loop until SPI completed.  Not sure if this is a busy wait will need to verify its allowed ------------------------------------------------------------
+for( volatile int16_t n =0; n<12; n++){}
 GPIOA->ODR |= (1U << 4);
 }
 

@@ -43,9 +43,10 @@ void knob(void)
 	knobWhileLoop = true;
 	while(knobWhileLoop == true)
 	{
-		for(int32_t i =0; i < 22345; i++) //sets speed of snake and makes sure an input can only be accepted/read for .02 seconds
+		for(int32_t i =0; i < 22345; i++) //how long know runs to accept input, lower value = faster snake
 		{
 			eA = update_btn(&quad_A);	//check and update the state for eA
+
 			if(eA == ACTIVE)
 			{
 				for(int32_t i=0; i<1; i++) //makes sure you cannot crank the knob and have the snake go in circles really quick

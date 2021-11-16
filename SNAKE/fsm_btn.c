@@ -2,9 +2,9 @@
 
 #include "stm32l053xx.h"
 #include <stdint.h>
-#include "fsm_btn.h"
 #include <assert.h>
-extern void gpio_init(void);
+#include "knob.h"
+
 
 // Initializer:
 void init_btn(uint32_t mask_for_btn, 

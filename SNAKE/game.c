@@ -192,7 +192,7 @@ void game(void){
                 write_q(&Locations, 123);
 							  gamestart=true;
             }
-				else if(length>=4) // this is where the victory condition will be set, current set at 7 so its easy to demonstrate
+				else if(length>=7) // this is where the victory condition will be set, current set at 7 so its easy to demonstrate
 				{
 								write_q(&Locations, 124);
                 write_q(&Locations, 124);
