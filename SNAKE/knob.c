@@ -1,4 +1,4 @@
-//knob functionality code - PB8 and PB9 accepts left(CCW) and right(CW) input and writes a 1, 2, 3 for CCW, STRAIGHT, CW respectivly to a queue and translates that to snake direction.
+//knob functionality code - PB8 and PB9 accepts left(CCW) and right(CW) input and writes a 1, 2, 3 for CCW, STRAIGHT, CW respectively to a queue and translates that to snake direction.
 #include "main.h"
 
 static bool knobWhileLoop;

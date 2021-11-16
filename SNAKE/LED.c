@@ -1,4 +1,5 @@
-//LED pwm code - changing brightness when a fruit is gathered
+//LED pwm code - the purpose of this code is to change the brightness of the led as a new fruit is picked up.
+//it starts at the min brightness and gets brighter as fruits are picked up. 
 #include "led.h"
 #include "main.h"
 
